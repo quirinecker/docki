@@ -53,15 +53,15 @@ impl Build {
 
 impl Command for Build {
     fn execute(&self, _args: &HashMap<String, String>) -> Result<(), String> {
-        let Ok(project_cwd_object) = env::current_dir() else {
-           return Err("current dirctory does not seem to exist".to_string())
-       };
+       //  let Ok(project_cwd_object) = env::current_dir() else {
+       //     return Err("current dirctory does not seem to exist".to_string())
+       // };
+       //
+       //  let Some(project_cwd) = project_cwd_object.to_str() else {
+       //     return Err("invalid path".to_string());
+       // };
 
-        let Some(project_cwd) = project_cwd_object.to_str() else {
-           return Err("invalid path".to_string());
-       };
-
-        let path = format!("{project_cwd}/docs/");
+        let path = format!("./docs/");
         let mut error_count = 0;
 
         if !self.docs_directory_exists(&path) {
