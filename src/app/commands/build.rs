@@ -21,7 +21,9 @@ impl Build {
             };
 
             let path = entry.path().to_str()
-                .expect("could not get text path");
+                .expect("could not get text path")
+                .to_string()
+                .clone();
 
             if entry.path().is_dir() {
                 results = [
