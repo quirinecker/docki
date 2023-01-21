@@ -1,4 +1,5 @@
 mod commands;
+pub mod builder;
 
 use std::collections::HashMap;
 

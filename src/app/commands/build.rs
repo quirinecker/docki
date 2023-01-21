@@ -1,45 +1,47 @@
-use std::{collections::HashMap, env, fs, process};
+use std::{collections::HashMap, env, fs};
+
+use crate::app::builder::{Builder, asciidoctor::AsciiDoctorBuilder};
 
 use super::traits::Command;
 
-pub struct Build;
+pub struct Build {
+    builder: Box<dyn Builder>
+}
+
 impl Build {
-    fn build_dir(&self, path: String) -> Result<(), String> {
+    fn build_dir(&self, path: String) -> Vec<Result<(), String>> {
+        let mut results = vec![];
         let Ok(dirs) = fs::read_dir(path) else {
-           return Err("could not read file system".to_string());
+           return vec![Err("could not read file system".to_string())]
        };
 
         for result in dirs {
             let Ok(entry) = result else {
-               return Err("could not read entry".to_string());
-           };
+               return vec![Err("could not read entry".to_string())];
+            };
+
+            let path = entry.path().to_str()
+                .expect("could not get text path");
 
             if entry.path().is_dir() {
-                self.build_dir(entry.path().to_str().unwrap().to_string());
+                results = [
+                    results, vec![self.build_file(&path)]
+                ].concat()
             } else {
-                self.build_file(entry.path().to_str().unwrap().to_string());
+                results.push(self.build_file(&path));
             }
         }
 
-        return Err("No files to build".to_string());
+        return results;
     }
 
-    fn build_file(&self, path: String) -> Result<(), String> {
+    fn build_file(&self, path: &str) -> Result<(), String> {
         let out_path = path
             .clone()
             .replace("docs", "dist")
             .replace(".adoc", ".html");
 
-        println!("asciidoctor {path} --out-file={out_path}");
-        let _result = process::Command::new("asciidoctor")
-            .arg(format!("{path}"))
-            .arg(format!("--out-file={out_path}"))
-            .output()
-            .expect("fuck");
-
-        dbg!(_result);
-
-        return Ok(());
+        return self.builder.build(&path, &out_path);
     }
 }
 
@@ -54,14 +56,31 @@ impl Command for Build {
        };
 
         let path = format!("{project_cwd}/docs/");
+        let mut error_count = 0;
 
-        return self.build_dir(path);
+        for result in self.build_dir(path) {
+            match result {
+                Err(e) => {
+                    error_count += 1;
+                    println!("{e}");
+                },
+                Ok(()) => println!("success")
+            };
+        }
+
+        if error_count > 0{
+            return Err(format!("failed with {} errors", error_count))
+        }
+
+        return Ok(());
     }
 
     fn new() -> Self
     where
         Self: Sized,
     {
-        return Build {};
+        return Build {
+            builder: Box::new(AsciiDoctorBuilder {})
+        };
     }
 }
