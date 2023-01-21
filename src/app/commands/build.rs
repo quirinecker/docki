@@ -9,7 +9,7 @@ pub struct Build {
 }
 
 impl Build {
-    fn build_dir(&self, path: String) -> Vec<Result<(), String>> {
+    fn build_dir(&self, path: &str) -> Vec<Result<(), String>> {
         let mut results = vec![];
         let Ok(dirs) = fs::read_dir(path) else {
            return vec![Err("could not read file system".to_string())]
@@ -27,7 +27,7 @@ impl Build {
 
             if entry.path().is_dir() {
                 results = [
-                    results, vec![self.build_file(&path)]
+                    results, self.build_dir(&path)
                 ].concat()
             } else {
                 results.push(self.build_file(&path));
@@ -60,7 +60,7 @@ impl Command for Build {
         let path = format!("{project_cwd}/docs/");
         let mut error_count = 0;
 
-        for result in self.build_dir(path) {
+        for result in self.build_dir(&path) {
             match result {
                 Err(e) => {
                     error_count += 1;
