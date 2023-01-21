@@ -1,4 +1,4 @@
-use std::{collections::HashMap, env, fs, path::Path};
+use std::{collections::HashMap, fs, path::Path};
 
 use crate::app::builder::{asciidoctor::AsciiDoctorBuilder, Builder};
 
