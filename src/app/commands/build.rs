@@ -1,18 +1,18 @@
-use std::{collections::HashMap, env, fs};
+use std::{collections::HashMap, env, fs, path::Path};
 
-use crate::app::builder::{Builder, asciidoctor::AsciiDoctorBuilder};
+use crate::app::builder::{asciidoctor::AsciiDoctorBuilder, Builder};
 
 use super::traits::Command;
 
 pub struct Build {
-    builder: Box<dyn Builder>
+    builder: Box<dyn Builder>,
 }
 
 impl Build {
     fn build_dir(&self, path: &str) -> Vec<Result<(), String>> {
         let mut results = vec![];
         let Ok(dirs) = fs::read_dir(path) else {
-           return vec![Err("could not read file system".to_string())]
+           return vec![Err(format!("direcotry {path} was not found. The filesystem was maybe updated while build"))]
        };
 
         for result in dirs {
@@ -20,15 +20,15 @@ impl Build {
                return vec![Err("could not read entry".to_string())];
             };
 
-            let path = entry.path().to_str()
+            let path = entry
+                .path()
+                .to_str()
                 .expect("could not get text path")
                 .to_string()
                 .clone();
 
             if entry.path().is_dir() {
-                results = [
-                    results, self.build_dir(&path)
-                ].concat()
+                results = [results, self.build_dir(&path)].concat()
             } else {
                 results.push(self.build_file(&path));
             }
@@ -45,6 +45,10 @@ impl Build {
 
         return self.builder.build(&path, &out_path);
     }
+
+    fn docs_directory_exists(&self, path: &String) -> bool {
+        Path::new(path).is_dir()
+    }
 }
 
 impl Command for Build {
@@ -60,18 +64,25 @@ impl Command for Build {
         let path = format!("{project_cwd}/docs/");
         let mut error_count = 0;
 
-        for result in self.build_dir(&path) {
-            match result {
-                Err(e) => {
-                    error_count += 1;
-                    println!("{e}");
-                },
-                Ok(()) => println!("success")
-            };
+        if !self.docs_directory_exists(&path) {
+            error_count += 1;
+            println!(
+                "docs directory does not exist. Either create it or clone the template from gitlab"
+            )
+        } else {
+            for result in self.build_dir(&path) {
+                match result {
+                    Err(e) => {
+                        error_count += 1;
+                        println!("{e}");
+                    }
+                    Ok(()) => println!("success"),
+                };
+            }
         }
 
-        if error_count > 0{
-            return Err(format!("failed with {} errors", error_count))
+        if error_count > 0 {
+            return Err(format!("failed with {} errors", error_count));
         }
 
         return Ok(());
@@ -82,7 +93,7 @@ impl Command for Build {
         Self: Sized,
     {
         return Build {
-            builder: Box::new(AsciiDoctorBuilder {})
+            builder: Box::new(AsciiDoctorBuilder {}),
         };
     }
 }
