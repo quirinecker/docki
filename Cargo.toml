@@ -1,5 +1,5 @@
 [package]
-name = "docki-cli"
+name = "docki"
 version = "0.1.0"
 edition = "2021"
 description = "cli for building and publishing documentation using asciidoctor"
