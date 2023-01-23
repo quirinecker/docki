@@ -15,9 +15,8 @@ test:
 
 publish:
   variables:
-    CARGO_TOKEN: $CARGO_TOKEN 
-  script:
-    - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
+    CARGO_REGISTRY_TOKEN: $CARGO_TOKEN 
+  script: 
     - echo $CARGO_REGISTRY_TOKEN
     - cargo publish
 
