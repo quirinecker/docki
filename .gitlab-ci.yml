@@ -18,7 +18,7 @@ publish:
     CARGO_TOKEN: $CARGO_TOKEN
     HELLO: $HELLO
   script:
-    - echo "$HELLO"
+    - echo "${HELLO}"
     - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
     - cargo publish
 
