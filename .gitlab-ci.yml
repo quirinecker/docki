@@ -8,12 +8,12 @@ default:
 build:
   stage: build
   script:
-    - echo "testing ci pipeline"
+    - cargo build
 
 test: 
   stage: test
   script:
-    - echo "testing the application"
+    - cargo test
 
 publish:
   stage: deploy
