@@ -16,5 +16,5 @@ default:
 
 publish:
   script:
-    - echo Secret Variable = $SA_HELLO
+    - echo Secret Variable = $SA_TEST
 
