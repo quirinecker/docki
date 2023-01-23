@@ -9,7 +9,7 @@ test:
     - echo "testing the application"
 
 publish:
-  stage: publish
+  stage: deploy
   script:
     - echo "publishing the application to crates.io"
 
