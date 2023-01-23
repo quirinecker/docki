@@ -17,6 +17,6 @@ publish:
   variables:
     CARGO_REGISTRY_TOKEN: $CARGO_TOKEN 
   script: 
-    - echo $CARGO_REGISTRY_TOKEN
+    - echo "$CARGO_REGISTRY_TOKEN"
     - cargo publish
 
