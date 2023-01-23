@@ -1,0 +1,15 @@
+build:
+  stage: build
+  script:
+    - echo "testing ci pipeline"
+
+test: 
+  stage: test
+  script:
+    - echo "testing the application"
+
+publish:
+  stage: publish
+  script:
+    - echo "publishing the application to crates.io"
+
