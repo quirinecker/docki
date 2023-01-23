@@ -13,11 +13,12 @@ test:
   script:
     - cargo test
 
+variables:
+  CARGO_TOKEN: $CARGO_TOKEN
+  HELLO: $TEST
+  TEST: sinfsdafj
+
 publish:
-  variables:
-    CARGO_TOKEN: $CARGO_TOKEN
-    HELLO: $TEST
-    TEST: sinfsdafj
   script:
     - echo "${TEST}"
     - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
