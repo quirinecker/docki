@@ -18,5 +18,6 @@ publish:
     CARGO_TOKEN: $CARGO_TOKEN 
   script:
     - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
+    - echo $CARGO_REGISTRY_TOKEN
     - cargo publish
 
