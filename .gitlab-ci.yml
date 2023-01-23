@@ -16,7 +16,7 @@ default:
 
 publish:
   script:
-    - export CARGO_REGISTRY_TOKEN = $CARGO_TOKEN
+    - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
     - cargo login
 
 
