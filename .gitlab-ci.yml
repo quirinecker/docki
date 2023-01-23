@@ -18,6 +18,6 @@ publish:
     CARGO_TOKEN: $CARGO_TOKEN
   script:
     - echo hello world
-    - export CARGO_REGISTRY_TOKEN="$CARGO_TOKEN"
+    - export CARGO_REGISTRY_TOKEN=cioWZiwn5Ojr1OLtoLvrdcPHivoCEVcC03x
     - cargo publish
 
