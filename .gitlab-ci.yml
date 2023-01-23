@@ -16,7 +16,6 @@ test:
 variables:
   CARGO_TOKEN: $CARGO_TOKEN
   HELLO: $TEST
-  TEST: sinfsdafj
 
 publish:
   script:
