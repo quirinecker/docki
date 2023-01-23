@@ -15,7 +15,7 @@ test:
 
 variables:
   CARGO_TOKEN: $CARGO_TOKEN
-  HELLO: $TEST
+  SA_HELLO: $SA_TEST
 
 publish:
   script:
