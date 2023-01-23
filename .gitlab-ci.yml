@@ -1,3 +1,8 @@
+workflow:
+  image: 'rust:slim'
+  # rules: 
+  #   - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+
 build:
   stage: build
   script:
@@ -12,4 +17,5 @@ publish:
   stage: deploy
   script:
     - echo "publishing the application to crates.io"
+
 
