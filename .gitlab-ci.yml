@@ -19,7 +19,7 @@ variables:
 
 publish:
   script:
-    - echo "${HELLO}"
+    - echo "Secret Variable: ${HELLO}"
     - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
     - cargo publish
 
