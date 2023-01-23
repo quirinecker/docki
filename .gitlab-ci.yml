@@ -6,19 +6,17 @@ default:
   image: 'rust:slim'
 
 build:
-  stage: build
   script:
     - cargo build
 
 test: 
-  stage: test
   script:
     - cargo test
 
 publish:
-  stage: deploy
-  script:
-    - export CARGO_REGISTRY_TOKEN=${CARGO_TOKEN}
-    - cargo publish
-
+  variables:
+    CARGO_TOKEN: $CARGO_TOKEN 
+    script:
+      - export CARGO_REGISTRY_TOKEN=$CARGO_TOKEN
+      - cargo publish
 
