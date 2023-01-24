@@ -8,6 +8,45 @@ pub struct Build {
     builder: Box<dyn Builder>,
 }
 
+impl Command for Build {
+    fn execute(&self, _args: &HashMap<String, String>) -> Result<(), String> {
+        let path = format!("./docs/");
+        let mut error_count = 0;
+
+        if !self.docs_directory_exists(&path) {
+            error_count += 1;
+            println!(
+                "docs directory does not exist. Either create it or clone the template from gitlab"
+            )
+        } else {
+            for result in self.build_dir(&path) {
+                match result {
+                    Err(e) => {
+                        error_count += 1;
+                        println!("{e}");
+                    }
+                    Ok(()) => println!("success"),
+                };
+            }
+        }
+
+        if error_count > 0 {
+            return Err(format!("failed with {} errors", error_count));
+        }
+
+        return Ok(());
+    }
+
+    fn new() -> Self
+    where
+        Self: Sized,
+    {
+        return Build {
+            builder: Box::new(AsciiDoctorBuilder {}),
+        };
+    }
+}
+
 impl Build {
     fn build_dir(&self, path: &str) -> Vec<Result<(), String>> {
         let mut results = vec![];
@@ -51,49 +90,3 @@ impl Build {
     }
 }
 
-impl Command for Build {
-    fn execute(&self, _args: &HashMap<String, String>) -> Result<(), String> {
-       //  let Ok(project_cwd_object) = env::current_dir() else {
-       //     return Err("current dirctory does not seem to exist".to_string())
-       // };
-       //
-       //  let Some(project_cwd) = project_cwd_object.to_str() else {
-       //     return Err("invalid path".to_string());
-       // };
-
-        let path = format!("./docs/");
-        let mut error_count = 0;
-
-        if !self.docs_directory_exists(&path) {
-            error_count += 1;
-            println!(
-                "docs directory does not exist. Either create it or clone the template from gitlab"
-            )
-        } else {
-            for result in self.build_dir(&path) {
-                match result {
-                    Err(e) => {
-                        error_count += 1;
-                        println!("{e}");
-                    }
-                    Ok(()) => println!("success"),
-                };
-            }
-        }
-
-        if error_count > 0 {
-            return Err(format!("failed with {} errors", error_count));
-        }
-
-        return Ok(());
-    }
-
-    fn new() -> Self
-    where
-        Self: Sized,
-    {
-        return Build {
-            builder: Box::new(AsciiDoctorBuilder {}),
-        };
-    }
-}
