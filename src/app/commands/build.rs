@@ -1,7 +1,10 @@
 use std::{collections::HashMap, path::Path};
 
 use crate::app::{
-    builder::{asciidoctor::{AsciiDoctorDocsBuilder, AsciiDoctorSlideBuilder}, Builder},
+    builder::{
+        asciidoctor::{AsciiDoctorDocsBuilder, AsciiDoctorSlideBuilder},
+        Builder,
+    },
     fs_util,
 };
 
@@ -9,7 +12,7 @@ use super::traits::Command;
 
 pub struct Build {
     slides_builder: Box<dyn Builder>,
-    docs_builder: Box<dyn Builder>
+    docs_builder: Box<dyn Builder>,
 }
 
 impl Command for Build {
@@ -27,27 +30,14 @@ impl Command for Build {
         };
 
         for (index, path) in paths.iter().enumerate() {
+            let progress = index + 1;
             if path.starts_with("./docs/slides") {
                 if self.build_slide(&path).is_ok() {
-                    println!(
-                        "({} / {}) [{}] {} -> {}",
-                        index,
-                        paths.len(),
-                        "slides",
-                        path,
-                        path.replace(".adoc", ".html")
-                    );
-                }
+                    Self::display_status(paths.len(), progress, &path, "slide")
+                } 
             } else {
                 if self.build_doc(&path).is_ok() {
-                    println!(
-                        "({} / {}) [{}] {} -> {}",
-                        index,
-                        paths.len(),
-                        "doc",
-                        path,
-                        path.replace(".adoc", ".html")
-                    );
+                    Self::display_status(paths.len(), progress, &path, "doc")
                 }
             }
         }
@@ -74,6 +64,17 @@ impl Build {
             .replace(".adoc", ".html");
 
         return builder.build(&path, &out_path);
+    }
+
+    fn display_status(goal: usize, progress: usize, path: &str, conversion_type: &str) -> () {
+        println!(
+            "({} / {}) [{}] {} -> {}",
+            progress,
+            goal,
+            conversion_type,
+            path,
+            path.replace(".adoc", ".html")
+        );
     }
 
     fn build_doc(&self, path: &str) -> Result<(), String> {
