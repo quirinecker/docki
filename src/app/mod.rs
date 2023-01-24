@@ -1,6 +1,7 @@
 mod commands;
 pub mod builder;
 pub mod rx;
+pub mod fs_util;
 
 use std::collections::HashMap;
 
