@@ -31,9 +31,10 @@ impl Command for Build {
             if path.starts_with("./docs/slides") {
                 if self.build_slide(&path).is_ok() {
                     println!(
-                        "({} / {}) {} -> {}",
+                        "({} / {}) [{}] {} -> {}",
                         index,
                         paths.len(),
+                        "slides",
                         path,
                         path.replace(".adoc", ".html")
                     );
@@ -41,9 +42,10 @@ impl Command for Build {
             } else {
                 if self.build_doc(&path).is_ok() {
                     println!(
-                        "({} / {}) {} -> {}",
+                        "({} / {}) [{}] {} -> {}",
                         index,
                         paths.len(),
+                        "doc",
                         path,
                         path.replace(".adoc", ".html")
                     );
