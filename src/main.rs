@@ -1,5 +1,8 @@
 mod app;
 
+#[cfg(test)] 
+mod test;
+
 use std::env;
 
 use app::App;
