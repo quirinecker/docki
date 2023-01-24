@@ -12,7 +12,6 @@ fn asciidoctor(postfix: &str, in_path: &str, out_path: &str) -> Result<(), Strin
         if success.stderr.len() == 0 {
             return Ok(());
         } else {
-            println!("something went wrong");
             return Err(AsciiDoctorDocsBuilder::from_utf8(success.stderr));
         }
     } else {

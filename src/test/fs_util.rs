@@ -2,7 +2,7 @@ use crate::app::fs_util;
 
 #[test]
 fn test_fetch_asciidoctor_paths_recursive() {
-    let paths = fs_util::fetch_paths_recursive("docs", ".adoc").unwrap();
+    let paths = fs_util::fetch_paths_recursive("res/test/docs", ".adoc").unwrap();
     let len = paths.len();
     dbg!(paths);
     assert_eq!(len, 4);
