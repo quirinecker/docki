@@ -15,14 +15,6 @@ impl RecursivePathFetch {
         }
     }
 
-    pub fn new(path: String) -> Self {
-        return Self {
-            paths: vec![],
-            ends_with: "".to_string(),
-            path
-        }
-    }
-
     pub fn fetch(&mut self) -> Result<Vec<String>, String> {
         if let Err(error) = self.read_dir(self.path.clone()) {
             return Err(error);

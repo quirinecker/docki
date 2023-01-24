@@ -1,9 +1,8 @@
-use std::{collections::HashMap, fs, path::Path};
+use std::{collections::HashMap, path::Path};
 
 use crate::app::{
     builder::{asciidoctor::{AsciiDoctorDocsBuilder, AsciiDoctorSlideBuilder}, Builder},
     fs_util,
-    rx::Observable,
 };
 
 use super::traits::Command;
