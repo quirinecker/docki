@@ -1,4 +1,4 @@
-use std::{fs, path::Path};
+use std::{fs::{self, File}, path::{Path, PathBuf}, io::{Write, Cursor}};
 
 use crate::app::{
     builder::{
@@ -27,9 +27,14 @@ impl BuildExecution {
 
     pub fn execute(&mut self) -> Result<(), String> {
         let path = "./docs/".to_string();
+
         if !Self::directory_exists(&path) {
             return Self::docs_directory_missing();
         }
+
+        if let Err(error) = Self::prepare() {
+            return Err(error);
+        } 
 
         return self.build_dir(&path);
     }
@@ -93,6 +98,27 @@ impl BuildExecution {
 
     fn build_doc(&self, in_path: &str, out_path: &str) {
         self.build_file_and_status(&self.doc_builder, in_path, out_path, "doc");
+    }
+
+    fn prepare() -> Result<(), String> {
+        let reveal_version = "3.9.2";
+        let target = format!("https://github.com/hakimel/reveal.js/archive/{reveal_version}.zip");
+
+        let Ok(response) = reqwest::blocking::get(target) else {
+            return Err("could not downlaod revealjs".to_string())
+        };
+
+        let Ok(bytes) = response.bytes() else {
+            return Err("could not extract bytes".to_string())
+        };
+
+        let out = PathBuf::from("./docs/slides/revealjs");
+
+        if zip_extract::extract(Cursor::new(bytes), &out, true).is_err() {
+            return Err("could not write extracted archive to disk".to_string());
+        }
+
+        return Ok(())
     }
 
     fn build_slide(&self, in_path: &str, out_path: &str) {
