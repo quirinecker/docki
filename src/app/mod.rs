@@ -18,7 +18,7 @@ impl App {
         }
     }
 
-    pub fn start(&self, args: Vec<String>) {
+    pub fn start(self, args: Vec<String>) {
         let command_args = &args[1..];
         let mut path = String::from("");
         let mut argument_map = HashMap::new();
@@ -45,7 +45,7 @@ impl App {
         self.execute_path(&path, &argument_map);
     }
 
-    fn execute_path(&self, path: &String, args: &HashMap<String, String>) {
+    fn execute_path(self, path: &String, args: &HashMap<String, String>) {
         let command = self.command_regisrty.command_by(path);
 
         if let Some(c) = command {
@@ -60,7 +60,7 @@ impl App {
 
         match result {
             Ok(_) => println!("successfully executed"),
-            Err(message) => println!("{message}"),
+            Err(message) => println!("{message}")
         }
     }
 }

@@ -5,6 +5,7 @@ use traits::Command;
 use self::build::Build;
 
 pub mod traits;
+pub mod executions;
 mod build;
 
 pub struct CommandRegistry {
