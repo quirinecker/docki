@@ -1,0 +1,1 @@
+asciidoctor-revealjs $1 -a revealjsdir=$2 --out-file=$3

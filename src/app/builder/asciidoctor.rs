@@ -1,4 +1,4 @@
-use std::{process, fmt::format};
+use std::process;
 
 use regex::Regex;
 
@@ -23,20 +23,21 @@ fn asciidoctor_docs(in_path: &str, out_path: &str) -> process::Command {
     let mut command = process::Command::new(format!("asciidoctor"));
 
     command
-        .arg(format!("{in_path}"))
-        .arg(format!("--out-file={out_path}"));
+        .arg(format!("--out-file={out_path}"))
+        .arg(format!("{in_path}"));
 
     return command;
 }
 
 fn asciidoctor_slides(in_path: &str, out_path: &str) -> process::Command {
-    let mut command = process::Command::new(format!("asciidoctor-revealjs"));
+    let mut command = process::Command::new(format!("sh"));
     let revealjs_path = path_between(out_path.to_string(), "./dist/slides/revealjs".to_string());
 
     command
+        .arg("asciidoctor-revealjs-sh")
         .arg(format!("{in_path}"))
-        .arg(format!("-a revealjsdir={revealjs_path}"))
-        .arg(format!("--out-file={out_path}"));
+        .arg(format!("{revealjs_path}"))
+        .arg(format!("{out_path}"));
 
     return command;
 }
@@ -47,7 +48,6 @@ pub fn path_between(from: String, to: String) -> String {
     let last_matching_index = matching_from_start(&from_segments, &to_segments);
     let number_of_backs = from_segments.len() - last_matching_index;
     let mut path_between = path_back(number_of_backs);
-    dbg!(&path_between);
     let path_to_to_path = &to_segments[last_matching_index..];
     path_between.push_str(&path_to_to_path.join("/"));
     return path_between; 

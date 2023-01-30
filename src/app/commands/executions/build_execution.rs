@@ -1,4 +1,4 @@
-use std::{fs::{self, File}, path::{Path, PathBuf}, io::{Write, Cursor}};
+use std::{fs, path::{Path, PathBuf}, io::Cursor};
 
 use crate::app::{
     builder::{
