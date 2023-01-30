@@ -30,16 +30,23 @@ fn asciidoctor_docs(in_path: &str, out_path: &str) -> process::Command {
 }
 
 fn asciidoctor_slides(in_path: &str, out_path: &str) -> process::Command {
-    let mut command = process::Command::new(format!("sh"));
-    let revealjs_path = path_between(out_path.to_string(), "./dist/slides/revealjs".to_string());
+    let mut command = process::Command::new(format!("asciidoctor-revealjs"));
+    let out_dir = parent_path(out_path);
+    let revealjs_path = path_between(out_dir.to_string(), "./dist/slides/revealjs".to_string());
 
     command
-        .arg("asciidoctor-revealjs-sh")
         .arg(format!("{in_path}"))
-        .arg(format!("{revealjs_path}"))
-        .arg(format!("{out_path}"));
+        .arg(format!("-a"))
+        .arg(format!("revealjsdir={revealjs_path}"))
+        .arg(format!("--out-file={out_path}"));
 
     return command;
+}
+
+fn parent_path(child_path: &str) -> String {
+    let split: Vec<&str> = child_path.split("/").collect();
+    let slice = &split[..split.len() - 1];
+    return slice.join("/");
 }
 
 pub fn path_between(from: String, to: String) -> String {
