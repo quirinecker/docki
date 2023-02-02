@@ -29,7 +29,7 @@ impl BuildExecution {
         let path = "./docs/".to_string();
 
         if !Self::directory_exists(&path) {
-            return Self::docs_directory_missing();
+            return Err("docs directory does not exist it. Create it or use the template".to_string())
         }
 
         if let Err(error) = Self::prepare() {
