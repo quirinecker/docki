@@ -6,6 +6,7 @@ pub struct Setup;
 
 impl Command for Setup {
    fn execute(&self, _args: &HashMap<String, String>) -> Result<(), String> {
+       println!("setting up");
        return Ok(())
    } 
 
