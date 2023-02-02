@@ -129,13 +129,6 @@ impl BuildExecution {
         Path::new(path).is_dir()
     }
 
-    fn docs_directory_missing() -> Result<(), String> {
-        return Err(
-            "direcotry {path} was not found. The filesystem was maybe updated while build"
-                .to_string(),
-        );
-    }
-
     fn build_dir(&mut self, path: &str) -> Result<(), String> {
         let result = fs_util::fetch_paths_recursive(&path);
 
