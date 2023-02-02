@@ -1,6 +1,6 @@
 [package]
 name = "docki"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 description = "cli for building and publishing documentation using asciidoctor"
 license-file = "LICENSE.txt"
