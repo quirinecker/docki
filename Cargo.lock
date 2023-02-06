@@ -115,6 +115,7 @@ dependencies = [
 name = "docki"
 version = "0.2.0"
 dependencies = [
+ "bytes",
  "regex",
  "reqwest",
  "zip-extract",
