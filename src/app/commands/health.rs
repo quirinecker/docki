@@ -89,14 +89,3 @@ impl Health {
 
 }
 
-#[cfg(test)]
-mod test {
-    use std::env;
-
-
-    #[test]
-    fn download() {
-        println!("{}", env::consts::OS);
-        assert!(false)
-    }
-}
