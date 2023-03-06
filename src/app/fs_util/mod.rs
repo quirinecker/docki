@@ -1,4 +1,4 @@
-use std::{fs, path::Path, env};
+use std::{env, fs, path::Path};
 
 struct RecursivePathFetch {
     paths: Vec<String>,
@@ -53,8 +53,7 @@ impl RecursivePathFetch {
 }
 
 pub fn fetch_paths_recursive(path: &str) -> Result<Vec<String>, String> {
-    let mut path_fetch =
-        RecursivePathFetch::new_with_extension_filter(path.to_string());
+    let mut path_fetch = RecursivePathFetch::new_with_extension_filter(path.to_string());
 
     return path_fetch.fetch();
 }
@@ -73,11 +72,13 @@ pub fn directory_exists(path: &String) -> bool {
     Path::new(path).is_dir()
 }
 
-
 pub fn expand_path(path: String) -> String {
-    let home_dir = env::var("HOME")
-        .expect("could not find home dir");
+    let home_dir = env::var("HOME").expect("could not find home dir");
 
-    return path.replace("~", &home_dir)
+    return path.replace("~", &home_dir);
+}
 
+pub fn docki_path_env() -> String {
+    let current = env::var("PATH").unwrap_or("".to_string());
+    return expand_path(format!("{}:~/.docki/", current));
 }

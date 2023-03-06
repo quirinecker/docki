@@ -2,6 +2,8 @@ use std::{collections::HashMap, process, io::ErrorKind};
 
 use colored::Colorize;
 
+use crate::app::fs_util;
+
 use super::traits::Command;
 
 pub struct Health;
@@ -71,7 +73,9 @@ impl Health {
     }
 
     fn check_command(command: &str) -> bool {
-        return match process::Command::new(command).output() {
+        return match process::Command::new(command)
+            // .env("PATH", fs_util::docki_path_env())
+            .output() {
             Ok(_) => true,
             Err(e) => ErrorKind::NotFound != e.kind()
         }

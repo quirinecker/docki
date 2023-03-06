@@ -3,6 +3,7 @@ pub mod builder;
 pub mod fs_util;
 
 use std::collections::HashMap;
+use std::env;
 
 use commands::traits::Command;
 use commands::CommandRegistry;
@@ -19,6 +20,7 @@ impl App {
     }
 
     pub fn start(self, args: Vec<String>) {
+        Self::preapare_env_path();
         let command_args = &args[1..];
         let mut path = String::from("");
         let mut argument_map = HashMap::new();
@@ -43,6 +45,10 @@ impl App {
         }
 
         self.execute_path(&path, &argument_map);
+    }
+
+    fn preapare_env_path() {
+        env::set_var("PATH", fs_util::docki_path_env());
     }
 
     fn execute_path(self, path: &String, args: &HashMap<String, String>) {
