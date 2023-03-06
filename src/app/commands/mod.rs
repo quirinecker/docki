@@ -2,12 +2,12 @@ use std::collections::HashMap;
 
 use traits::Command;
 
-use self::{build::Build, setup::Setup};
+use self::{build::Build, health::Health};
 
 pub mod traits;
 pub mod executions;
 mod build;
-mod setup;
+mod health;
 
 pub struct CommandRegistry {
     commands: HashMap<String,  Box<dyn Command>>
@@ -18,7 +18,7 @@ impl CommandRegistry {
     pub fn register_all(&mut self) {
         let registry = self;
         registry.register("/build".to_string(), Box::new(Build::new()), true);
-        registry.register("/setup".to_string(), Box::new(Setup::new()), true);
+        registry.register("/health".to_string(), Box::new(Health::new()), true);
 
     }
 

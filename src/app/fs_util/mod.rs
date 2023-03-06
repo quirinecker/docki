@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, path::Path, env};
 
 struct RecursivePathFetch {
     paths: Vec<String>,
@@ -57,4 +57,27 @@ pub fn fetch_paths_recursive(path: &str) -> Result<Vec<String>, String> {
         RecursivePathFetch::new_with_extension_filter(path.to_string());
 
     return path_fetch.fetch();
+}
+
+pub fn create_dir_recursive(path: &str) {
+    let mut validated_path = "".to_string();
+    for segment in path.split("/") {
+        validated_path.push_str(format!("{segment}/").as_str());
+        if !directory_exists(&validated_path) {
+            fs::create_dir(&validated_path).unwrap()
+        }
+    }
+}
+
+pub fn directory_exists(path: &String) -> bool {
+    Path::new(path).is_dir()
+}
+
+
+pub fn expand_path(path: String) -> String {
+    let home_dir = env::var("HOME")
+        .expect("could not find home dir");
+
+    return path.replace("~", &home_dir)
+
 }
