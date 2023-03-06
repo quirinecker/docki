@@ -25,6 +25,7 @@ Option 1:
 Option 2:
 - Install the binary from Github https://github.com/asciidoctor/asciidoctor-reveal.js/releases
 - Move the downloaded binary in a folder included in the path
+- Make sure the binary is called asciidoctor-revealjs and not asciidoctor-revealjs-linux or similar
 ";
 
 impl Command for Health {
