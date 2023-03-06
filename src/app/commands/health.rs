@@ -2,8 +2,6 @@ use std::{collections::HashMap, process, io::ErrorKind};
 
 use colored::Colorize;
 
-use crate::app::fs_util;
-
 use super::traits::Command;
 
 pub struct Health;
@@ -22,7 +20,7 @@ const INFO_REVEAL: &str = "
 There are two options to install it:
 
 Option 1:
-- run `docki reveal`
+- run `docki install-reveal
 
 Option 2:
 - Install the binary from Github https://github.com/asciidoctor/asciidoctor-reveal.js/releases
@@ -74,7 +72,6 @@ impl Health {
 
     fn check_command(command: &str) -> bool {
         return match process::Command::new(command)
-            // .env("PATH", fs_util::docki_path_env())
             .output() {
             Ok(_) => true,
             Err(e) => ErrorKind::NotFound != e.kind()

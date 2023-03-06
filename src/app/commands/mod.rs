@@ -20,7 +20,7 @@ impl CommandRegistry {
         let registry = self;
         registry.register("/build".to_string(), Box::new(Build::new()), true);
         registry.register("/health".to_string(), Box::new(Health::new()), true);
-        registry.register("/reveal".to_string(), Box::new(Reveal::new()), true);
+        registry.register("/install-reveal".to_string(), Box::new(Reveal::new()), true);
 
     }
 

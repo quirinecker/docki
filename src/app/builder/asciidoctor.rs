@@ -15,7 +15,7 @@ fn exec_command(command: &mut process::Command) -> Result<(), String> {
         }
     } else {
         println!("{}", result.unwrap_err());
-        return Err("asciidoctor not installed. You may need to run docki setup!".to_string());
+        return Err("asciidoctor not installed. For more information run docki health!".to_string());
     }
 }
 
