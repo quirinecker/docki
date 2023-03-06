@@ -1,19 +1,31 @@
-use std::{collections::HashMap, env, fs::File, io::Write, process};
+use std::{collections::HashMap, process, io::ErrorKind};
 
-use crate::app::fs_util;
+use colored::Colorize;
 
 use super::traits::Command;
-use bytes::Bytes;
-use colored::Colorize;
 
 pub struct Health;
 
-const REVEAL_VERSION: &str ="v5.0.0-rc.1";
-const REVEAL_PATH: &str = "~/.docki/asciidoctor-reveal";
+const INFO_ASCIIDOC: &str = "
+Install the binary with your package manager!
 
-fn reveal_url(os: String) -> String {
-    return format!("https://github.com/asciidoctor/asciidoctor-reveal.js/releases/download/{}/asciidoctor-revealjs-{}", REVEAL_VERSION, os)
-}
+sudo apt install asciidoctor
+brew install asciidoctor
+gem install asciidoctor
+sudo pacman -Syu asciidoctor
+yay -Syu asciidoctor
+";
+
+const INFO_REVEAL: &str = "
+There are two options to install it:
+
+Option 1:
+- run `docki reveal`
+
+Option 2:
+- Install the binary from Github https://github.com/asciidoctor/asciidoctor-reveal.js/releases
+- Move the downloaded binary in a folder included in the path
+";
 
 impl Command for Health {
    fn execute(&self, _args: &HashMap<String, String>) -> Result<(), String> {
@@ -28,86 +40,51 @@ impl Command for Health {
 
 
 impl Health {
-
     fn health() {
-        println!("checking required softwar ... \n");
-        let asciidoctor_installed = Self::asciidoctor_is_installed();
-        let asciidoctor_reveal_installed = Self::asciidoctor_revealjs_is_installed();
+        Self::check_asciidoc();
+        Self::check_reveal();
+    }
 
-        if asciidoctor_installed {
-            println!("- ✔️ {}", "asciidoctor".green())
+    fn check_reveal() -> () {
+        if Self::reveal_is_installed() {
+            Self::print_health_ok("asciidoctor-revealjs")
         } else {
-            println!("- ❓{}", "asciidoctor \n".bright_red());
-            Self::print_asciidoctor_install_help();
-            println!("");
-        }
-
-        if asciidoctor_reveal_installed {
-            println!("- ✔️ {}", "asciidoctor-revealjs".green())
-        } else {
-            println!("- ❓{}", "asciidoctor-revealjs \n".bright_red());
-            Self::ask_to_install_reveal()
+            Self::print_health_not_ok("asciidoctor-revealjs", INFO_REVEAL)
         }
     }
 
-    fn ask_to_install_reveal() {
-            print!("Do you want to install it ? (y/n)");
-            let user_input: String = text_io::read!("{}\n");
-
-            if user_input.to_lowercase() == "y" {
-                let os = env::consts::OS;
-                let url = reveal_url(os.to_string());
-                println!("installing");
-                let data = Self::donwload(&url).expect("failed installing");
-                Self::save_to("~/.docki/asciidoctor-revealjs", data);
-            } else if user_input.to_lowercase() == "y"{
-                println!("not installing")
-            } else {
-                println!("not a valid option (not installing)")
-            }
+    fn reveal_is_installed() -> bool {
+        return Self::check_command("asciidoctor-revealjs")
     }
 
-    fn print_asciidoctor_install_help() {
-            println!("you may want to install it with your package manager");
-            println!("");
-            println!("{}", "sudo apt install asciidoctor".yellow());
-            println!("{}", "brew install asciidoctor".yellow());
-            println!("{}", "sudo pacman -Syu asciidoctor".yellow());
-            println!("{}", "yay -Syu asciidoctor".yellow());
-            println!("{}", "dnf install asciidoctor".yellow());
+    fn check_asciidoc() -> () {
+        if Self::asciidoc_is_installed() {
+            Self::print_health_ok("asciidoctor")
+        } else {
+            Self::print_health_not_ok("asciidoctor", INFO_ASCIIDOC)
+        }
     }
 
-    fn asciidoctor_is_installed() -> bool {
-        return process::Command::new("asciidoctor")
-            .output()
-            .is_ok()
+    fn asciidoc_is_installed() -> bool {
+        return Self::check_command("asciidoctor")
     }
 
-    fn asciidoctor_revealjs_is_installed() -> bool {
-        return process::Command::new("asciidoctor-revealjs")
-            .output()
-            .is_ok()
+    fn check_command(command: &str) -> bool {
+        return match process::Command::new(command).output() {
+            Ok(_) => true,
+            Err(e) => ErrorKind::NotFound != e.kind()
+        }
     }
 
-    fn donwload(url: &str) -> Result<Bytes, ()> {
-        let Ok(response) = reqwest::blocking::get(url) else {
-            return Err(());
-        };
-
-        let Ok(data) = response.bytes() else {
-            return Err(());
-        };
-
-        return Ok(data)
+    fn print_health_ok(name: &str) {
+        println!("- ✔️ {}", name.bright_green());
     }
 
-    fn save_to(path: &str, data: Bytes) -> () {
-        let segments: &Vec<&str> = &path.split("/").collect();
-        let parent_dir = &segments[0..segments.len() - 1].join("/");
-        fs_util::create_dir_recursive(parent_dir);
-        let mut file = File::create(path).expect("failed to create file");
-        file.write_all(&data).expect("failed saving file")
+    fn print_health_not_ok(name: &str, info: &str) {
+        println!("- ❗{}", name.bright_red());
+        println!("{}", info.bright_black())
     }
+
 }
 
 #[cfg(test)]
