@@ -2,13 +2,14 @@ use std::collections::HashMap;
 
 use traits::Command;
 
-use self::{build::Build, health::Health, reveal::Reveal};
+use self::{build::Build, health::Health, reveal::Reveal, serve::Serve};
 
 pub mod traits;
 pub mod executions;
 mod build;
 mod health;
 mod reveal;
+mod serve;
 
 pub struct CommandRegistry {
     commands: HashMap<String,  Box<dyn Command>>
@@ -21,6 +22,7 @@ impl CommandRegistry {
         registry.register("/build".to_string(), Box::new(Build::new()), true);
         registry.register("/health".to_string(), Box::new(Health::new()), true);
         registry.register("/install-reveal".to_string(), Box::new(Reveal::new()), true);
+        registry.register("/serve".to_string(), Box::new(Serve::new()), true)
 
     }
 
