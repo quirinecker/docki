@@ -16,13 +16,17 @@ impl App {
 
     pub fn start(&self) {
         let args = args();
-        env::set_var("PATH", fs_util::docki_path_env());
+        Self::setup_environment_variables();
 
         match args.command {
             CommandArg::Build => build(),
             CommandArg::Health => health(),
             CommandArg::InstallReveal => install_reveal()
         }
+    }
+
+    fn setup_environment_variables() {
+        env::set_var("PATH", fs_util::docki_path_env());
     }
 
     pub fn new() -> Self {
