@@ -1,12 +1,15 @@
 mod commands;
 pub mod builder;
 pub mod fs_util;
+mod args;
 
 use std::collections::HashMap;
 use std::env;
 
 use commands::traits::Command;
 use commands::CommandRegistry;
+
+use self::args::args;
 
 pub struct App {
     command_regisrty: CommandRegistry,
@@ -19,9 +22,10 @@ impl App {
         }
     }
 
-    pub fn start(self, args: Vec<String>) {
+    pub fn start(self, old_args: Vec<String>) {
+        let args = args();
         Self::preapare_env_path();
-        let command_args = &args[1..];
+        let command_args = &old_args[1..];
         let mut path = String::from("");
         let mut argument_map = HashMap::new();
         let mut only_options_left = false;

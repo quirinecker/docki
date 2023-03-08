@@ -9,6 +9,7 @@ license-file = "LICENSE.txt"
 
 [dependencies]
 bytes = "1.4.0"
+clap = { version = "4.1.8", features = ["derive"] }
 colored = "2.0.0"
 home = "0.5.4"
 regex = "1.7.1"
