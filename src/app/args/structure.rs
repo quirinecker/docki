@@ -3,10 +3,12 @@ use clap::{Parser, Subcommand};
 #[derive(Parser)]
 pub struct Args {
     #[command(subcommand)]
-    command: Option<CommandArg>
+    command: CommandArg
 }
 
 #[derive(Subcommand)]
 enum CommandArg {
     Build,
+    Health,
+    InstallReveal
 }
