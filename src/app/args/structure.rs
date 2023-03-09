@@ -13,5 +13,7 @@ pub enum CommandArg {
     /// Checks if everything required for docki is installed
     Health,
     /// Helper command for installing asciidoctor-reveal-js
-    InstallReveal
+    InstallReveal,
+    /// Starts a Webserver with the live preview of the Documentation
+    Serve
 }

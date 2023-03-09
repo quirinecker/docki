@@ -9,6 +9,7 @@ use self::args::{args, structure::CommandArg};
 use self::commands::build::build;
 use self::commands::health::health;
 use self::commands::install_reveal::install_reveal;
+use self::commands::serve::serve;
 
 pub struct App;
 
@@ -21,7 +22,8 @@ impl App {
         match args.command {
             CommandArg::Build => build(),
             CommandArg::Health => health(),
-            CommandArg::InstallReveal => install_reveal()
+            CommandArg::InstallReveal => install_reveal(),
+            CommandArg::Serve => serve()
         }
     }
 
