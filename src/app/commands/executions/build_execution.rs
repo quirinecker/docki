@@ -5,7 +5,7 @@ use std::{
 
 use crate::app::{
     build::{docki_build, DockiBuildResult},
-    fs_util,
+    fs_util, log::display_status,
 };
 
 pub struct BuildExecution {
@@ -73,23 +73,21 @@ impl BuildExecution {
 
             match result {
                 DockiBuildResult::Err(err) => {
-                    self.display_status("Error", in_path, "");
+                    self.display_building_status("Error", in_path, "");
                     println!("{}", err)
                 },
-                DockiBuildResult::Copy(out_path) => self.display_status("Copy", &in_path, &out_path),
-                DockiBuildResult::Slide(out_path) => self.display_status("Slide", &in_path, &out_path),
-                DockiBuildResult::Doc(out_path) => self.display_status("Doc", &in_path, &out_path)
+                DockiBuildResult::Copy(out_path) => self.display_building_status("Copy", &in_path, &out_path),
+                DockiBuildResult::Slide(out_path) => self.display_building_status("Slide", &in_path, &out_path),
+                DockiBuildResult::Doc(out_path) => self.display_building_status("Doc", &in_path, &out_path)
             }
         }
 
         return Ok(());
     }
 
-    fn display_status(&self, status_type: &str, in_path: &str, out_path: &str) -> () {
-        println!(
-            "({} / {}) [{}] {} -> {}",
-            self.progress, self.goal, status_type, in_path, out_path
-        );
+    fn display_building_status(&self, status_type: &str, in_path: &str, out_path: &str) -> () {
+        let progress_str = format!("{} / {}", self.progress, self.goal);
+        display_status(&progress_str, status_type, in_path, out_path);
     }
 
 }

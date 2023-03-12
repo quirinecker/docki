@@ -5,12 +5,13 @@ use notify::{
     event::ModifyKind,
     Event, EventKind, RecursiveMode, Watcher,
 };
-use std::{env, path::Path};
+use std::{env, path::Path, process::Output};
 
-use crate::app::{ watcher::watcher, build::docki_build};
+use crate::app::{ watcher::watcher, build::{docki_build, DockiBuildResult}, commands::build::build, log::display_status};
 
 
 pub async fn serve() {
+    build().await;
     tokio::join!(watch_and_build(), start_server());
 }
 
@@ -21,7 +22,7 @@ async fn watch_and_build() {
 }
 
 async fn start_server() {
-    println!("Serving at http://localhost:8080");
+    println!("\nServing at {} ", "http://localhost:8080".bold());
 
     let Ok(()) = listen("localhost", 8080, "./dist").await else {
         panic!("could not start server")
@@ -44,14 +45,13 @@ async fn watch(path: &Path) -> notify::Result<()> {
 fn file_change(event: Event) {
     match event.kind {
         EventKind::Modify(ModifyKind::Data(_)) => {
-            build_file(event.paths).expect("building file failed");
-            ()
+            build_file(event.paths)
         }
         _ => (),
     }
 }
 
-fn build_file(paths: Vec<std::path::PathBuf>) -> Result<(), String> {
+fn build_file(paths: Vec<std::path::PathBuf>) {
     let invalid_path_message = "changed path is invalid";
     let in_path = paths
         .first()
@@ -61,10 +61,22 @@ fn build_file(paths: Vec<std::path::PathBuf>) -> Result<(), String> {
         .replace(&current_dir(), "")
         .replace("/./", "./");
 
-    println!("{} {}", "[Rebuilding]".green(), in_path);
 
-    docki_build(&in_path);
-    return Ok(())
+    let result = docki_build(&in_path);
+
+    match result {
+        DockiBuildResult::Slide(out_path) => display_rebuilding_status("Slide", &in_path, &out_path),
+        DockiBuildResult::Doc(out_path) => display_rebuilding_status("Doc", &in_path, &out_path),
+        DockiBuildResult::Copy(out_path) => display_rebuilding_status("Copy", &in_path, &out_path),
+        DockiBuildResult::Err(err) => {
+            display_rebuilding_status("Error", &in_path, "");
+            println!("{}", err);
+        },
+    }
+}
+
+fn display_rebuilding_status(context: &str, in_path: &str, out_path: &str) {
+    display_status("Rebuildng", context, in_path, out_path)
 }
 
 fn current_dir() -> String {
