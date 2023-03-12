@@ -1,5 +1,5 @@
 mod commands;
-pub mod builder;
+pub mod build;
 pub mod fs_util;
 pub mod watcher;
 mod args;

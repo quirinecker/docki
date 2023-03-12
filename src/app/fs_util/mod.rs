@@ -82,3 +82,4 @@ pub fn docki_path_env() -> String {
     let current = env::var("PATH").unwrap_or("".to_string());
     return expand_path(format!("{}:~/.docki/", current));
 }
+

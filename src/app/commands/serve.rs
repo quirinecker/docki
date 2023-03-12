@@ -7,10 +7,7 @@ use notify::{
 };
 use std::{env, path::Path};
 
-use crate::app::{builder::{
-        asciidoctor::{AsciiDoctorDocsBuilder, AsciiDoctorSlideBuilder},
-        Builder,
-}, watcher::watcher};
+use crate::app::{ watcher::watcher, build::docki_build};
 
 
 pub async fn serve() {
@@ -63,19 +60,11 @@ fn build_file(paths: Vec<std::path::PathBuf>) -> Result<(), String> {
         .expect(invalid_path_message)
         .replace(&current_dir(), "")
         .replace("/./", "./");
-    let out_path = in_path
-        .replace("./docs/", "./dist/")
-        .replace(".adoc", ".html");
 
     println!("{} {}", "[Rebuilding]".green(), in_path);
 
-    if in_path.starts_with("./docs/slides") {
-        let slide_builder = AsciiDoctorSlideBuilder {};
-        slide_builder.build(&in_path, &out_path)
-    } else {
-        let doc_builder = AsciiDoctorDocsBuilder {};
-        doc_builder.build(&in_path, &out_path)
-    }
+    docki_build(&in_path);
+    return Ok(())
 }
 
 fn current_dir() -> String {
