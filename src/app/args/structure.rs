@@ -15,5 +15,9 @@ pub enum CommandArg {
     /// Helper command for installing asciidoctor-reveal-js
     InstallReveal,
     /// Starts a Webserver with the live preview of the Documentation
-    Serve
+    Serve {
+        /// Port for the Live Server 
+        #[arg(short, long)]
+        port: Option<u16>
+    }
 }

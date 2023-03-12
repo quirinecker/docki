@@ -10,9 +10,9 @@ use std::{env, path::Path};
 use crate::app::{ watcher::watcher, build::{docki_build, DockiBuildResult}, commands::build::build, log::display_status};
 
 
-pub async fn serve() {
+pub async fn serve(port: Option<u16>) {
     build().await;
-    tokio::join!(watch_and_build(), start_server());
+    tokio::join!(watch_and_build(), start_server(port));
 }
 
 async fn watch_and_build() {
@@ -21,10 +21,10 @@ async fn watch_and_build() {
         .expect("something went wrong")
 }
 
-async fn start_server() {
+async fn start_server(port: Option<u16>) {
     println!("\nServing at {} ", "http://localhost:8080".bold());
 
-    let Ok(()) = listen("localhost", 8080, "./dist").await else {
+    let Ok(()) = listen("localhost", port.unwrap_or(8080), "./dist").await else {
         panic!("could not start server")
     };
 }
