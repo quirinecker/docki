@@ -1,6 +1,7 @@
 mod commands;
 pub mod builder;
 pub mod fs_util;
+pub mod watcher;
 mod args;
 
 use std::env;

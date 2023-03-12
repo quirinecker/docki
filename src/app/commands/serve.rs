@@ -1,16 +1,16 @@
 use colored::Colorize;
+use futures::StreamExt;
 use live_server::listen;
 use notify::{
     event::ModifyKind,
-    Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
+    Event, EventKind, RecursiveMode, Watcher,
 };
 use std::{env, path::Path};
-use tokio::sync::mpsc::{channel, Receiver};
 
-use crate::app::builder::{
+use crate::app::{builder::{
         asciidoctor::{AsciiDoctorDocsBuilder, AsciiDoctorSlideBuilder},
         Builder,
-};
+}, watcher::watcher};
 
 
 pub async fn serve() {
@@ -38,11 +38,9 @@ async fn watch(path: &Path) -> notify::Result<()> {
 
     watcher.watch(path.as_ref(), RecursiveMode::Recursive)?;
 
-    while let Some(res) = rx.recv().await {
-        match res {
-            Ok(event) => file_change(event),
-            Err(e) => println!("watch error: {:?}", e),
-        }
+    while let Some(res) = rx.next().await {
+        let event = res.expect("watching failed");
+        file_change(event)
     }
 
     Ok(())
@@ -92,17 +90,3 @@ fn current_dir() -> String {
     );
 }
 
-fn watcher() -> notify::Result<(RecommendedWatcher, Receiver<notify::Result<Event>>)> {
-    let (tx, rx) = channel(1);
-
-    let watcher = RecommendedWatcher::new(
-        move |res| {
-            futures::executor::block_on(async {
-                tx.send(res).await.unwrap();
-            });
-        },
-        Config::default(),
-    )?;
-
-    Ok((watcher, rx))
-}
