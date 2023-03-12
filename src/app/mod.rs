@@ -15,16 +15,16 @@ pub struct App;
 
 impl App {
 
-    pub fn start(&self) {
+    pub async fn start(&self) {
         let args = args();
         Self::setup_environment_variables();
 
         match args.command {
-            CommandArg::Build => build(),
+            CommandArg::Build => build().await,
             CommandArg::Health => health(),
-            CommandArg::InstallReveal => install_reveal(),
-            CommandArg::Serve => serve()
-        }
+            CommandArg::InstallReveal => install_reveal().await,
+            CommandArg::Serve => serve().await
+        };
     }
 
     fn setup_environment_variables() {

@@ -5,7 +5,8 @@ mod test;
 
 use app::App;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let app = App::new();
-    app.start();
+    app.start().await;
 }
