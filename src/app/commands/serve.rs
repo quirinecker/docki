@@ -5,7 +5,7 @@ use notify::{
     event::ModifyKind,
     Event, EventKind, RecursiveMode, Watcher,
 };
-use std::{env, path::Path, process::Output};
+use std::{env, path::Path};
 
 use crate::app::{ watcher::watcher, build::{docki_build, DockiBuildResult}, commands::build::build, log::display_status};
 
@@ -44,9 +44,7 @@ async fn watch(path: &Path) -> notify::Result<()> {
 
 fn file_change(event: Event) {
     match event.kind {
-        EventKind::Modify(ModifyKind::Data(_)) => {
-            build_file(event.paths)
-        }
+        EventKind::Modify(ModifyKind::Data(_)) => build_file(event.paths),
         _ => (),
     }
 }
