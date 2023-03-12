@@ -1,6 +1,6 @@
 use super::executions::build_execution::BuildExecution;
 
-pub fn build() -> () {
+pub async fn build() -> () {
     let mut build_execution = BuildExecution::new();
-    build_execution.execute().expect("build failed")
+    build_execution.execute().await.expect("build failed")
 }

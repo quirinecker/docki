@@ -25,14 +25,14 @@ impl BuildExecution {
         };
     }
 
-    pub fn execute(&mut self) -> Result<(), String> {
+    pub async fn execute(&mut self) -> Result<(), String> {
         let path = "./docs/".to_string();
 
         if !Self::directory_exists(&path) {
             return Err("docs directory does not exist it. Create it or use the template".to_string())
         }
 
-        if let Err(error) = Self::prepare() {
+        if let Err(error) = Self::prepare().await {
             return Err(error);
         } 
 
@@ -100,7 +100,7 @@ impl BuildExecution {
         self.build_file_and_status(&self.doc_builder, in_path, out_path, "doc");
     }
 
-    fn prepare() -> Result<(), String> {
+    async fn prepare() -> Result<(), String> {
         let reveal_version = "3.9.2";
         let target = format!("https://github.com/hakimel/reveal.js/archive/{reveal_version}.zip");
 

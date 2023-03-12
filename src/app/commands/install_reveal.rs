@@ -4,7 +4,7 @@ use crate::app::fs_util;
 
 const ASCIIDOC_REVEAL_VERSION: &str= "v4.1.0-rc.5";
 
-pub fn install_reveal() -> () {
+pub async fn install_reveal() -> () {
     let result = reqwest::blocking::get(url())
         .expect("Could not download reveal. Make sure you are connected to the internet");
 
