@@ -15,8 +15,6 @@ use crate::app::{builder::{
 
 pub async fn serve() {
     tokio::join!(watch_and_build(), start_server());
-
-    println!("stopping live server");
 }
 
 async fn watch_and_build() {
