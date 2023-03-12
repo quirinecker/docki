@@ -1,19 +1,17 @@
 use colored::Colorize;
 use live_server::listen;
 use notify::{
-    event::{self, ModifyKind},
+    event::ModifyKind,
     Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
 };
 use std::{env, path::Path};
 use tokio::sync::mpsc::{channel, Receiver};
 
-use crate::app::{
-    builder::{
+use crate::app::builder::{
         asciidoctor::{AsciiDoctorDocsBuilder, AsciiDoctorSlideBuilder},
         Builder,
-    },
-    fs_util,
 };
+
 
 pub async fn serve() {
     tokio::join!(watch_and_build(), start_server());
