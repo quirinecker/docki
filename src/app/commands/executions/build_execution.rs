@@ -5,7 +5,7 @@ use std::{
 
 use crate::app::{
     build::{docki_build, DockiBuildResult},
-    fs_util, log::display_status,
+    fs_util::{self, create_dir_recursive}, log::display_status,
 };
 
 pub struct BuildExecution {
@@ -41,6 +41,8 @@ impl BuildExecution {
     async fn prepare() -> Result<(), String> {
         let reveal_version = "3.9.2";
         let target = format!("https://github.com/hakimel/reveal.js/archive/{reveal_version}.zip");
+
+        create_dir_recursive("./docs/slides");
 
         let Ok(response) = reqwest::get(target).await else {
             return Err("could not downlaod revealjs".to_string())
