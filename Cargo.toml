@@ -1,9 +1,13 @@
+# Cargo.toml
+build = "build.rs"
+
 [package]
 name = "docki"
 version = "1.0.0"
 edition = "2021"
 description = "cli for building and publishing documentation using asciidoctor"
 license-file = "LICENSE.txt"
+authors = ["Quirin Ecker"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -20,3 +24,8 @@ reqwest = { version = "0.11.14", features = ["blocking"] }
 text_io = "0.1.12"
 tokio = { version = "1.26.0", features = ["full"] }
 zip-extract = "0.1.1"
+
+[build-dependencies]
+clap = { version = "4.1.8", features = ["derive"] }
+clap_complete = "*"
+
