@@ -1,10 +1,5 @@
-use std::{collections::HashMap, process, io::ErrorKind};
-
+use std::{process::Command, io::ErrorKind};
 use colored::Colorize;
-
-use super::traits::Command;
-
-pub struct Health;
 
 const INFO_ASCIIDOC: &str = "
 Install the binary with your package manager!
@@ -28,64 +23,49 @@ Option 2:
 - Make sure the binary is called asciidoctor-revealjs and not asciidoctor-revealjs-linux or similar
 ";
 
-impl Command for Health {
-   fn execute(&self, _args: &HashMap<String, String>) -> Result<(), String> {
-       Self::health();
-       return Ok(())
-   } 
-
-   fn new() -> Self where Self: Sized {
-       return Self {}
-   }
+pub fn health() {
+    check_asciidoc();
+    check_reveal();
 }
 
-
-impl Health {
-    fn health() {
-        Self::check_asciidoc();
-        Self::check_reveal();
+fn check_reveal() -> () {
+    if reveal_is_installed() {
+        print_health_ok("asciidoctor-revealjs")
+    } else {
+        print_health_not_ok("asciidoctor-revealjs", INFO_REVEAL)
     }
+}
 
-    fn check_reveal() -> () {
-        if Self::reveal_is_installed() {
-            Self::print_health_ok("asciidoctor-revealjs")
-        } else {
-            Self::print_health_not_ok("asciidoctor-revealjs", INFO_REVEAL)
-        }
+fn reveal_is_installed() -> bool {
+    return check_command("asciidoctor-revealjs")
+}
+
+fn check_asciidoc() -> () {
+    if asciidoc_is_installed() {
+        print_health_ok("asciidoctor")
+    } else {
+        print_health_not_ok("asciidoctor", INFO_ASCIIDOC)
     }
+}
 
-    fn reveal_is_installed() -> bool {
-        return Self::check_command("asciidoctor-revealjs")
+fn asciidoc_is_installed() -> bool {
+    return check_command("asciidoctor")
+}
+
+fn check_command(command: &str) -> bool {
+    return match Command::new(command)
+        .output() {
+        Ok(_) => true,
+        Err(e) => ErrorKind::NotFound != e.kind()
     }
+}
 
-    fn check_asciidoc() -> () {
-        if Self::asciidoc_is_installed() {
-            Self::print_health_ok("asciidoctor")
-        } else {
-            Self::print_health_not_ok("asciidoctor", INFO_ASCIIDOC)
-        }
-    }
+fn print_health_ok(name: &str) {
+    println!("- ✔️ {}", name.bright_green());
+}
 
-    fn asciidoc_is_installed() -> bool {
-        return Self::check_command("asciidoctor")
-    }
-
-    fn check_command(command: &str) -> bool {
-        return match process::Command::new(command)
-            .output() {
-            Ok(_) => true,
-            Err(e) => ErrorKind::NotFound != e.kind()
-        }
-    }
-
-    fn print_health_ok(name: &str) {
-        println!("- ✔️ {}", name.bright_green());
-    }
-
-    fn print_health_not_ok(name: &str, info: &str) {
-        println!("- ❗{}", name.bright_red());
-        println!("{}", info.bright_black())
-    }
-
+fn print_health_not_ok(name: &str, info: &str) {
+    println!("- ❗{}", name.bright_red());
+    println!("{}", info.bright_black())
 }
 

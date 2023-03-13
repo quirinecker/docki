@@ -1,5 +1,3 @@
-use std::{fs, path::Path};
-
 use crate::app::fs_util;
 
 #[test]
