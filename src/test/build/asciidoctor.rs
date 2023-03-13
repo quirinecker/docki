@@ -1,4 +1,4 @@
-use crate::app::builder::asciidoctor;
+use crate::app::build::asciidoctor;
 
 #[test]
 fn last_matching_index_0() {
