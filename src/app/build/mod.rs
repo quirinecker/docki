@@ -36,9 +36,7 @@ pub fn docki_build(in_path: &str) -> DockiBuildResult {
 }
 
 fn copy(in_path: &str, out_path: &str) ->  Result<(), String> {
-    let segments: &Vec<&str> = &out_path.split("/").collect();
-    let parent_dir = &segments[0..segments.len() - 1].join("/");
-    fs_util::create_dir_recursive(parent_dir);
+    fs_util::create_parent_dir_recursive(out_path);
 
     if let Err(err) = fs::copy(in_path, out_path) {
         return Err(err.to_string())

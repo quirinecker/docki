@@ -83,3 +83,9 @@ pub fn docki_path_env() -> String {
     return expand_path(format!("{}:~/.docki/", current));
 }
 
+pub fn create_parent_dir_recursive(out_path: &str) -> () {
+    let segments: &Vec<&str> = &out_path.split("/").collect();
+    let parent_dir = &segments[0..segments.len() - 1].join("/");
+    create_dir_recursive(parent_dir);
+}
+
