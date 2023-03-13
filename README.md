@@ -1,6 +1,6 @@
 # Docki
 
-Docki is cli for converting asciidoctor files into html files. You can build your documentation with `docki build` and write documenation with the live server with `docki serve`.
+Docki is cli for converting asciidoctor files into html files. You can build your documentation with `docki build` and write documenation using the live server with `docki serve`.
 
 ## Installation
 
