@@ -22,7 +22,12 @@ async fn watch_and_build() {
 }
 
 async fn start_server(port: Option<u16>) {
-    println!("\nServing at {} ", "http://localhost:8080".bold());
+    let unwrapped_port = port.unwrap_or(8080);
+    println!(
+        "\nServing at {}{} ",
+        "http://localhost:".bold(),
+        unwrapped_port.to_string().bold()
+    );
 
     let Ok(()) = listen("localhost", port.unwrap_or(8080), "./dist").await else {
         panic!("could not start server")
