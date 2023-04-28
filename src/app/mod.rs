@@ -9,6 +9,7 @@ use std::env;
 
 use self::args::{args, structure::CommandArg};
 use self::commands::build::build;
+use self::commands::completions::completions;
 use self::commands::health::health;
 use self::commands::install_reveal::install_reveal;
 use self::commands::serve::serve;
@@ -25,7 +26,8 @@ impl App {
             CommandArg::Build => build().await,
             CommandArg::Health => health(),
             CommandArg::InstallReveal => install_reveal().await,
-            CommandArg::Serve { port } => serve(port).await
+            CommandArg::Serve { port } => serve(port).await,
+            CommandArg::Completions => completions()
         };
     }
 
