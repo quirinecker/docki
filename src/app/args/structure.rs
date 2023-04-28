@@ -19,5 +19,7 @@ pub enum CommandArg {
         /// Port for the Live Server 
         #[arg(short, long)]
         port: Option<u16>
-    }
+    },
+    /// Information about the completions
+    Completions
 }
