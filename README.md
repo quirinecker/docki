@@ -8,8 +8,21 @@ Docki is cli for converting asciidoctor files into html files. You can build you
 
 ## Installation
 
+### Homebrew
+
+```
+brew tap quirinecker/docki-homebrew https://gitlab.com/quirinecker/docki-homebrew
+```
+
+```
+brew install docki 
+```
+
+### Cargo
+
 ```shell
 cargo install docki
 ```
+
 
 
