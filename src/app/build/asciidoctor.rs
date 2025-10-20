@@ -32,7 +32,7 @@ fn asciidoctor_docs(in_path: &str, out_path: &str) -> process::Command {
 fn asciidoctor_slides(in_path: &str, out_path: &str) -> process::Command {
     let mut command = process::Command::new(format!("asciidoctor-revealjs"));
     let out_dir = parent_path(out_path);
-    let revealjs_path = path_between(out_dir.to_string(), "./dist/slides/revealjs".to_string());
+    let revealjs_path = "/slides/revealjs";
 
     command
         .arg(format!("{in_path}"))
