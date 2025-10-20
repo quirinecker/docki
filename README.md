@@ -12,6 +12,16 @@ Docki is cli for converting asciidoctor files into html files. You can build you
 
 ## Installation
 
+### Nix
+
+This installation method is recommended, becuase it is the most maintained due to me using nix in development.
+
+Note: This is the most basic installation. If you are already more experienced, you might want to add it to your shell or home manager configuration.
+
+```nix
+nix profile install github:quirinecker/docki
+```
+
 ### Homebrew
 
 ```
