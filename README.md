@@ -1,5 +1,9 @@
 # Docki
 
+> [!NOTE]
+> This project is under renovations. While installing it right now might work, it is not guaranteed
+
+
 ## Preview
 
 ![screencast](.gitlab/screencast.gif)
@@ -15,7 +19,7 @@ brew tap quirinecker/docki-homebrew https://gitlab.com/quirinecker/docki-homebre
 ```
 
 ```
-brew install docki 
+brew install docki
 ```
 
 ### Cargo
