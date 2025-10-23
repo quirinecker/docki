@@ -10,6 +10,20 @@
 
 Docki is cli for converting asciidoctor files into html files. You can build your documentation with `docki build` and write documenation using the live server with `docki serve`.
 
+## Usage
+
+### Building the documentation
+
+```shell
+docki build
+```
+
+### Serving the documentation on a live server
+
+```shell
+docki serve
+```
+
 ## Installation
 
 ### Nix
@@ -18,7 +32,7 @@ This installation method is recommended, because it will include both asciidocto
 
 Note: This is the most basic installation. If you are already more experienced, you might want to add it to your shell or home manager configuration.
 
-```nix
+```shell
 nix profile install github:quirinecker/docki
 ```
 
@@ -27,7 +41,7 @@ nix profile install github:quirinecker/docki
 > [!NOTE]
 > Installing it via homebrew will not include asciidoctor_revealjs. It can be installed afterwards with `docki install-reveal`
 
-```
+```shell
 brew tap quirinecker/docki-homebrew https://github.com/quirinecker/docki-homebrew
 ```
 
@@ -61,7 +75,7 @@ docki = {
 
 2. Add `@inputs` at the end of the outputs (if you haven't already)
 
-```
+```nix
 outputs = {
 	nixpkgs
 	...
@@ -84,3 +98,28 @@ home.packages = with pkgs; [
 	inputs.docki.packages.${system}.default
 ]
 ```
+
+## Development
+
+### Running it
+
+If you just want to run it, you can use the `nix run` command. This will install all the build dependencies, build the binary and run it.
+
+```shell
+nix run
+```
+
+### Development Shell
+
+You can also use the development shell with the command below. In this shell all dependencies for building and running the project are installed.
+
+```shell
+nix develop
+```
+
+Afterwards it can be built and run with cargo
+
+```shell
+cargo run -- <args>
+```
+
