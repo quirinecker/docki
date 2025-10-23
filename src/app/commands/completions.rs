@@ -1,21 +1,16 @@
-use colored::Colorize;
+use std::io;
 
-const INFO: &str = "
-You can add completions for docki with the following methods. If you want the completions to be persistent add
-them to a init file e.g. ~/.zshrc, ~/.bashrc, ~/.config/fish/config.fish.
+use clap::CommandFactory;
+use clap_complete::{generate, shells::{Bash, Fish, Zsh}};
 
-Get Fish Completions
-source ~/.docki/completions/docki.fish
+use crate::app::args::structure::{Args, ShellArg};
 
-Get Zsh Completions
-source ~/.docki/completions/_docki
+pub fn completions(shell: ShellArg) {
+    let mut command = Args::command();
 
-Get Bash Completions
-source ~/.docki/completions/docki.bash
-";
-
-pub fn completions() {
-    println!();
-    println!("{}", "Completions".blue().bold());
-    println!("{}", INFO.bright_black());
+    match shell {
+        ShellArg::Bash => generate(Bash, &mut command, "docki", &mut io::stdout()),
+        ShellArg::Fish => generate(Fish, &mut command, "docki", &mut io::stdout()),
+        ShellArg::Zsh => generate(Zsh, &mut command, "docki", &mut io::stdout()),
+    }
 }

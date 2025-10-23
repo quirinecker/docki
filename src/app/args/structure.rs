@@ -3,7 +3,14 @@ use clap::{Parser, Subcommand};
 #[derive(Parser)]
 pub struct Args {
     #[command(subcommand)]
-    pub command: CommandArg
+    pub command: CommandArg,
+}
+
+#[derive(Subcommand)]
+pub enum ShellArg {
+    Bash,
+    Fish,
+    Zsh,
 }
 
 #[derive(Subcommand)]
@@ -16,10 +23,13 @@ pub enum CommandArg {
     InstallReveal,
     /// Starts a Webserver with the live preview of the Documentation
     Serve {
-        /// Port for the Live Server 
+        /// Port for the Live Server
         #[arg(short, long)]
-        port: Option<u16>
+        port: Option<u16>,
     },
-    /// Information about the completions
-    Completions
+    /// Generates completions for the desired shell
+    Completions {
+        #[command(subcommand)]
+        shell: ShellArg,
+    },
 }

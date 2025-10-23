@@ -27,7 +27,7 @@ impl App {
             CommandArg::Health => health(),
             CommandArg::InstallReveal => install_reveal().await,
             CommandArg::Serve { port } => serve(port).await,
-            CommandArg::Completions => completions()
+            CommandArg::Completions { shell } => completions(shell)
         };
     }
 

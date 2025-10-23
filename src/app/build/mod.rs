@@ -6,10 +6,6 @@ use super::fs_util;
 
 pub mod asciidoctor;
 
-pub trait Builder {
-    fn build(&self, in_path: &str, out_path: &str) -> Result<(), String>;
-}
-
 pub fn docki_build(in_path: &str) -> DockiBuildResult {
     let out_path = in_path.replace("/docs/", "/dist/");
     let convert_out_path = out_path.replace(".adoc", ".html");
@@ -35,11 +31,11 @@ pub fn docki_build(in_path: &str) -> DockiBuildResult {
     }
 }
 
-fn copy(in_path: &str, out_path: &str) ->  Result<(), String> {
+fn copy(in_path: &str, out_path: &str) -> Result<(), String> {
     fs_util::create_parent_dir_recursive(out_path);
 
     if let Err(err) = fs::copy(in_path, out_path) {
-        return Err(err.to_string())
+        return Err(err.to_string());
     }
 
     Ok(())
