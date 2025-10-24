@@ -5,6 +5,9 @@ edition = "2021"
 description = "cli for building and publishing documentation using asciidoctor"
 license-file = "LICENSE.txt"
 authors = ["Quirin Ecker"]
+exclude = [
+	".gitlab"
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
