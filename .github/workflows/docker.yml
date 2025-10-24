@@ -1,0 +1,32 @@
+name: Docker
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Cargo.toml'
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: |
+        apt install -y nu
+        version=$(nu -c "cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version")
+        echo $version
+    - name: Run tests
+      run: cargo test --verbose
+    - name: Publish to crates.io
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+      run: |
+        cargo publish --verbose
