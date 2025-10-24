@@ -19,7 +19,6 @@ jobs:
 
             - name: Build Docker image
               run: |
-                  apt install -y nu
                   version=$(nu -c "cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version")
                   echo $version
             - name: Run tests
