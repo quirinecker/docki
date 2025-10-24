@@ -1,7 +1,7 @@
 # Docki
 
 > [!NOTE]
-> This project is under renovations. While installing it right now might work, it is not guaranteed
+> This project is under renovations. It can be used, but it might not be completely stable yet.
 
 
 ## Preview
