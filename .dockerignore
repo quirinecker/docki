@@ -1,1 +1,6 @@
 **
+!src
+!Cargo.toml
+!Cargo.lock
+!flake.nix
+!flake.lock

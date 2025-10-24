@@ -1,7 +1,11 @@
-FROM rust:slim
+FROM nixos/nix AS build
 
-WORKDIR /opt/rust
+WORKDIR /app
 
-RUN apt update \
-    && apt-get -y upgrade \
-    && apt-get -y install libssl-dev pkg-config 
+COPY . /app
+
+RUN nix --extra-experimental-features nix-command --extra-experimental-features flakes build \
+	&& nix --extra-experimental-features nix-command --extra-experimental-features flakes store gc
+
+RUN mkdir /out && cp result/bin/docki .
+
