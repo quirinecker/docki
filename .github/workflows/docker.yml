@@ -28,9 +28,13 @@ jobs:
                   nix_path: nixpkgs=channel:nixos-unstable
 
             - run: nix build .#docker
+
+            - run: |
+                  export CARGO_VERSION=$(nu -c "cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version")
+                    echo "CARGO_VERSION=$CARGO_VERSION" >> $GITHUB_ENV
+
             - run: docker load -i result
-            - run: export CARGO_VERSION=$(nu -c "cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version")
             - name: Log in to registry
               run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            - run: docker tag docki:latest ghcr.io/quirinecker/docki/docki:$CARGO_VERSION
+            - run: docker tag docki:latest "ghcr.io/quirinecker/docki/docki:$CARGO_VERSION"
             - run: docker push docki:$CARGO_VERSION
