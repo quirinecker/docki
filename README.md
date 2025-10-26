@@ -63,7 +63,13 @@ cargo install docki
 
 ### Docker
 
-There is also a docker image available to use. It is primarily used for the gh actions. The following chain of commands builds the docker image and afterward imports it into docker.
+There is also a docker image available to use. It is primarily used for the gh actions.
+
+```shell
+docker pull ghcr.io/quirinecker/docki:latest
+```
+
+You can also build it yourself with nix.
 
 ```
 nix build .#docker && docker load -i result
