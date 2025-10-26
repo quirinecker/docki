@@ -29,7 +29,7 @@ jobs:
 
             - run: nix build .#docker
             - run: docker load -i result
-            - run: export CARGO_VERSION=$(cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version)
+            - run: export CARGO_VERSION=$(nu -c "cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version")
             - name: Log in to registry
               run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             - run: docker tag docki:latest ghcr.io/quirinecker/docki/docki:$CARGO_VERSION
