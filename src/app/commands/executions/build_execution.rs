@@ -39,11 +39,12 @@ impl BuildExecution {
 
 
     async fn prepare() -> Result<(), String> {
-        let reveal_version = "3.9.2";
+        let reveal_version = "5.2.1";
         let target = format!("https://github.com/hakimel/reveal.js/archive/{reveal_version}.zip");
 
         create_dir_recursive("./docs/slides");
 
+		let response = reqwest::get(target.clone()).await.unwrap();
         let Ok(response) = reqwest::get(target).await else {
             return Err("could not downlaod revealjs".to_string())
         };
