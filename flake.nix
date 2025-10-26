@@ -120,6 +120,23 @@
             naerskLib = naerskLib;
             pkgs = pkgs;
           };
+
+          docker = pkgs.dockerTools.buildImage {
+            name = "docki";
+            tag = "latest";
+            copyToRoot = pkgs.buildEnv {
+              name = "docki-docker";
+              paths = [
+                pkgs.coreutils
+                pkgs.bash
+                pkgs.cacert
+                (build_docki {
+                  naerskLib = naerskLib;
+                  pkgs = pkgs;
+                })
+              ];
+            };
+          };
         }
       );
     };
