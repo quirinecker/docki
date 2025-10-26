@@ -50,7 +50,7 @@ If you just want to try it out real quick and the nix package manager is availab
 nix develop github:quirinecker/docki#preview
 ```
 
-This will open a shell evnironment with docki installed. If you want to install it permanently with nix, i would recommend following the instructions in the [Nix (Advanced, Flake)](#nix-(advanced%2C-flake)) section.
+This will open a shell evnironment with docki installed. If you want to install it permanently with nix, i would recommend following the instructions in the [Nix (Advanced, Flake)](#nix-advanced-flake) section.
 
 ### Cargo
 
