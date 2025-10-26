@@ -36,6 +36,6 @@ jobs:
             - run: docker load -i result
             - name: Log in to registry
               run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            - run: docker tag docki:latest "ghcr.io/quirinecker/docki/docki:$CARGO_VERSION"
+            - run: docker tag docki:latest "ghcr.io/quirinecker/docki:$CARGO_VERSION"
             - run: docker push ghcr.io/quirinecker/docki:$CARGO_VERSION
             - run: docker push ghcr.io/quirinecker/docki:latest
