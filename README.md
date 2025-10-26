@@ -6,7 +6,7 @@
 
 ## Preview
 
-![screencast](.gitlab/screencast.gif)
+![screencast](.github/assets/screencast.gif)
 
 Docki is cli for converting asciidoctor files into html files.
 
@@ -61,6 +61,13 @@ brew install docki
 cargo install docki
 ```
 
+### Docker
+
+There is also a docker image available to use. It is primarily used for the gh actions. The following chain of commands builds the docker image and afterward imports it into docker.
+
+```
+nix build .#docker && docker load -i result
+```
 
 ### Nix (Advanced, Flake)
 
