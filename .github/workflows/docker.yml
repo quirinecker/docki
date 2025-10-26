@@ -14,6 +14,11 @@ env:
 jobs:
     build:
         runs-on: ubuntu-latest
+        permissions:
+            packages: write
+            contents: read
+            attestations: write
+            id-token: write
 
         steps:
             - uses: actions/checkout@v4
@@ -24,5 +29,6 @@ jobs:
 
             - run: nix build .#docker
             - run: docker load -i result
-            - run: docker tag docki:latest docki:$(nu -c "cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version")
-            - run: docker image ls
+            - run: export CARGO_VERSION=$(cargo metadata --format-version=1 --no-deps | from json | get packages | first | get version)
+            - run: docker tag docki:latest ghcr.io/quirinecker/docki:$CARGO_VERSION
+            - run: docker push docki:$CARGO_VERSION
