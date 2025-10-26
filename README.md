@@ -29,28 +29,28 @@ docki serve
 
 ## Installation
 
-### Nix
-
-This installation method is recommended, because it will include both asciidoctor and asciidoctor_revealjs.
-
-Note: This is the most basic installation. If you are already more experienced, you might want to add it to your shell or home manager configuration.
-
-```shell
-nix profile install github:quirinecker/docki
-```
-
 ### Homebrew
 
 > [!NOTE]
 > Installing it via homebrew will not include asciidoctor_revealjs. It can be installed afterwards with `docki install-reveal`
 
 ```shell
-brew tap quirinecker/docki-homebrew https://github.com/quirinecker/docki-homebrew
+brew tap quirinecker/homebrew-docki https://github.com/quirinecker/homebrew-docki
 ```
 
 ```
 brew install docki
 ```
+
+### Nix
+
+If you just want to try it out real quick and the nix package manager is available on your system you can use the following command.
+
+```shell
+nix develop github:quirinecker/docki#preview
+```
+
+This will open a shell evnironment with docki installed. If you want to install it permanently with nix, i would recommend following the instructions in the [Nix (Advanced, Flake)](#nix-(advanced%2C-flake)) section.
 
 ### Cargo
 
