@@ -1,0 +1,11 @@
+= My cool presentation
+:author: John Doe
+:email: john@doe.com
+
+== First slide
+
+Content
+
+== Second slide
+
+Content
