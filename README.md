@@ -31,9 +31,6 @@ docki serve
 
 ### Homebrew
 
-> [!NOTE]
-> Installing it via homebrew will not include asciidoctor_revealjs. It can be installed afterwards with `docki install-reveal`
-
 ```shell
 brew tap quirinecker/homebrew-docki https://github.com/quirinecker/homebrew-docki
 ```
