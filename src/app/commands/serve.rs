@@ -59,12 +59,12 @@ fn build_file(paths: Vec<std::path::PathBuf>) {
     let in_path = paths
         .first()
         .expect(invalid_path_message)
+		.strip_prefix(&current_dir())
+		.expect(invalid_path_message)
         .to_str()
-        .expect(invalid_path_message)
-        .replace(&current_dir(), "")
-        .replace("/./", "./");
+        .expect(invalid_path_message);
 
-
+	let in_path = format!("./{}", in_path);
     let result = docki_build(&in_path);
 
     match result {
