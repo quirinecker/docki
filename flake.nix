@@ -124,6 +124,9 @@
           docker = pkgs.dockerTools.buildImage {
             name = "docki";
             tag = "latest";
+            config = {
+              WorkingDir = "/app";
+            };
             copyToRoot = pkgs.buildEnv {
               name = "docki-docker";
               paths = [
