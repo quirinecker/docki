@@ -21,7 +21,7 @@ impl BuildExecution {
         };
     }
 
-    pub async fn execute(&mut self) -> Result<(), String> {
+    pub async fn execute(&mut self, offline_reveal: bool) -> Result<(), String> {
         let path = "./docs/".to_string();
 
         if !fs_util::directory_exists(&path) {
@@ -30,21 +30,25 @@ impl BuildExecution {
             );
         }
 
-        if let Err(error) = Self::prepare().await {
+        if let Err(error) = Self::prepare(offline_reveal).await {
             return Err(error);
         }
 
-        return self.build_dir(&path);
+        return self.build_dir(&path, offline_reveal);
     }
 
 
-    async fn prepare() -> Result<(), String> {
+    async fn prepare(offline_reveal: bool) -> Result<(), String> {
+		if !offline_reveal {
+			return Ok(())
+		}
+
         let reveal_version = "5.2.1";
         let target = format!("https://github.com/hakimel/reveal.js/archive/{reveal_version}.zip");
 
         create_dir_recursive("./docs/slides");
 
-		let response = reqwest::get(target.clone()).await.unwrap();
+		reqwest::get(target.clone()).await.unwrap();
         let Ok(response) = reqwest::get(target).await else {
             return Err("could not downlaod revealjs".to_string())
         };
@@ -62,7 +66,7 @@ impl BuildExecution {
         return Ok(());
     }
 
-    fn build_dir(&mut self, path: &str) -> Result<(), String> {
+    fn build_dir(&mut self, path: &str, offline_reveal: bool) -> Result<(), String> {
         let result = fs_util::fetch_paths_recursive(&path);
 
         let Ok(paths) = result else {
@@ -72,7 +76,7 @@ impl BuildExecution {
         for (index, in_path) in paths.iter().enumerate() {
             self.progress = index + 1;
             self.goal = paths.len();
-            let result = docki_build(&in_path);
+            let result = docki_build(&in_path, offline_reveal);
 
             match result {
                 DockiBuildResult::Err(err) => {
@@ -81,7 +85,8 @@ impl BuildExecution {
                 },
                 DockiBuildResult::Copy(out_path) => self.display_building_status("Copy", &in_path, &out_path),
                 DockiBuildResult::Slide(out_path) => self.display_building_status("Slide", &in_path, &out_path),
-                DockiBuildResult::Doc(out_path) => self.display_building_status("Doc", &in_path, &out_path)
+                DockiBuildResult::Doc(out_path) => self.display_building_status("Doc", &in_path, &out_path),
+				DockiBuildResult::Silent => ()
             }
         }
 

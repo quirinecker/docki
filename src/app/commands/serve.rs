@@ -11,7 +11,7 @@ use crate::app::{ watcher::watcher, build::{docki_build, DockiBuildResult}, comm
 
 
 pub async fn serve(port: Option<u16>) {
-    build().await;
+    build(false).await;
     tokio::join!(watch_and_build(), start_server(port));
 }
 
@@ -65,7 +65,7 @@ fn build_file(paths: Vec<std::path::PathBuf>) {
         .expect(invalid_path_message);
 
 	let in_path = format!("./{}", in_path);
-    let result = docki_build(&in_path);
+    let result = docki_build(&in_path, false);
 
     match result {
         DockiBuildResult::Slide(out_path) => display_rebuilding_status("Slide", &in_path, &out_path),
@@ -75,6 +75,7 @@ fn build_file(paths: Vec<std::path::PathBuf>) {
             display_rebuilding_status("Error", &in_path, "");
             println!("{}", err);
         },
+		DockiBuildResult::Silent => ()
     }
 }
 

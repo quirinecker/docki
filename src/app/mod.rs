@@ -23,7 +23,7 @@ impl App {
         Self::setup_environment_variables();
 
         match args.command {
-            CommandArg::Build => build().await,
+            CommandArg::Build { offline_reveal } => build(offline_reveal).await,
             CommandArg::Health => health(),
             CommandArg::InstallReveal => install_reveal().await,
             CommandArg::Serve { port } => serve(port).await,

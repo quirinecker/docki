@@ -28,10 +28,14 @@ fn asciidoctor_docs(in_path: &str, out_path: &str) -> process::Command {
     return command;
 }
 
-fn asciidoctor_slides(in_path: &str, out_path: &str) -> process::Command {
+fn asciidoctor_slides(in_path: &str, out_path: &str, offline_reveal: bool) -> process::Command {
     let mut command = process::Command::new(format!("asciidoctor-revealjs"));
     let out_dir = parent_path(out_path);
-    let revealjs_path = path_between(out_dir.to_string(), "./dist/slides/revealjs".to_string());
+	let revealjs_path = if offline_reveal {
+		path_between(out_dir.to_string(), "./dist/slides/revealjs".to_string())
+	} else {
+		"https://cdn.jsdelivr.net/npm/reveal.js@5.2.1".to_string()
+	};
 
     command
         .arg(format!("{in_path}"))
@@ -101,8 +105,8 @@ pub fn build_doc(in_path: &str, out_path: &str) -> Result<(), String> {
     return exec_command(&mut command);
 }
 
-pub fn build_slide(in_path: &str, out_path: &str) -> Result<(), String> {
-    let mut command = asciidoctor_slides(in_path, out_path);
+pub fn build_slide(in_path: &str, out_path: &str, offline_reveal: bool) -> Result<(), String> {
+    let mut command = asciidoctor_slides(in_path, out_path, offline_reveal);
     return exec_command(&mut command);
 }
 

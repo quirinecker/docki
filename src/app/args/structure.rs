@@ -16,7 +16,10 @@ pub enum ShellArg {
 #[derive(Subcommand)]
 pub enum CommandArg {
     /// Builds the documentation into a dist folder
-    Build,
+    Build {
+        #[arg(short, long)]
+        offline_reveal: bool,
+    },
     /// Checks if everything required for docki is installed
     Health,
     /// Helper command for installing asciidoctor-reveal-js
