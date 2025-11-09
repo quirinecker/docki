@@ -1,4 +1,4 @@
-name: Rust
+name: Deploy Rust to Crates.io
 
 on:
     push:
