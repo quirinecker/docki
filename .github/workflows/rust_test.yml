@@ -2,9 +2,15 @@ name: Test Rust
 
 on:
     push:
-        branches: ["develop"]
+        branches: ["main", "develop"]
+        paths:
+            - "./src/**"
+            - "./Cargo.toml"
     pull_request:
         branches: ["main", "develop"]
+        paths:
+            - "./src/**"
+            - "./Cargo.toml"
 
 env:
     CARGO_TERM_COLOR: always
