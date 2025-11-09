@@ -1,4 +1,4 @@
-use colored::Colorize;
+use nu_ansi_term::Color::Green;
 use futures::StreamExt;
 use live_server::listen;
 use notify::{
@@ -21,15 +21,18 @@ async fn watch_and_build() {
         .expect("something went wrong")
 }
 
+
 async fn start_server(port: Option<u16>) {
-    let unwrapped_port = port.unwrap_or(8080);
+    let port = port.unwrap_or(8080);
+	let link = &format!("http://localhost:{}", port);
+	let hyperlink = Green.paint(link).hyperlink(link);
+
     println!(
-        "\nServing at {}{} ",
-        "http://localhost:".bold(),
-        unwrapped_port.to_string().bold()
+        "\nServing at {}",
+        hyperlink
     );
 
-    let Ok(()) = listen("localhost", port.unwrap_or(8080), "./dist").await else {
+    let Ok(()) = listen("localhost", port, "./dist").await else {
         panic!("could not start server")
     };
 }

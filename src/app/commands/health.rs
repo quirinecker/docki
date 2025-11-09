@@ -1,5 +1,5 @@
-use std::{process::Command, io::ErrorKind};
-use colored::Colorize;
+use nu_ansi_term::Color::{LightGray, LightGreen, LightRed};
+use std::{io::ErrorKind, process::Command};
 
 const INFO_ASCIIDOC: &str = "
 Install the binary with your package manager!
@@ -37,7 +37,7 @@ fn check_reveal() -> () {
 }
 
 fn reveal_is_installed() -> bool {
-    return check_command("asciidoctor-revealjs")
+    return check_command("asciidoctor-revealjs");
 }
 
 fn check_asciidoc() -> () {
@@ -49,23 +49,21 @@ fn check_asciidoc() -> () {
 }
 
 fn asciidoc_is_installed() -> bool {
-    return check_command("asciidoctor")
+    return check_command("asciidoctor");
 }
 
 fn check_command(command: &str) -> bool {
-    return match Command::new(command)
-        .output() {
+    return match Command::new(command).output() {
         Ok(_) => true,
-        Err(e) => ErrorKind::NotFound != e.kind()
-    }
+        Err(e) => ErrorKind::NotFound != e.kind(),
+    };
 }
 
 fn print_health_ok(name: &str) {
-    println!("- ✔️ {}", name.bright_green());
+    println!("- ✔️ {}", LightGreen.paint(name));
 }
 
 fn print_health_not_ok(name: &str, info: &str) {
-    println!("- ❗{}", name.bright_red());
-    println!("{}", info.bright_black())
+    println!("- ❗{}", LightRed.paint(name));
+    println!("{}", LightGray.paint(info))
 }
-
