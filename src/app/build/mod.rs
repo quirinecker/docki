@@ -6,12 +6,12 @@ use super::fs_util;
 
 pub mod asciidoctor;
 
-pub fn docki_build(in_path: &str) -> DockiBuildResult {
+pub fn docki_build(in_path: &str, offline_reveal: bool) -> DockiBuildResult {
     let out_path = in_path.replace("/docs/", "/dist/");
     let convert_out_path = out_path.replace(".adoc", ".html");
 
     if in_path.starts_with("./docs/slides/") && in_path.ends_with(".adoc") {
-        if let Err(err) = build_slide(&in_path, &convert_out_path) {
+        if let Err(err) = build_slide(&in_path, &convert_out_path, offline_reveal) {
             return DockiBuildResult::Err(err);
         }
 
@@ -23,6 +23,10 @@ pub fn docki_build(in_path: &str) -> DockiBuildResult {
 
         DockiBuildResult::Doc(convert_out_path)
     } else {
+		if in_path.starts_with("./docs/slides/revealjs") && !offline_reveal {
+			return DockiBuildResult::Silent;
+		}
+
         if let Err(err) = copy(&in_path, &out_path) {
             return DockiBuildResult::Err(err);
         }
@@ -46,4 +50,5 @@ pub enum DockiBuildResult {
     Doc(String),
     Copy(String),
     Err(String),
+	Silent,
 }
