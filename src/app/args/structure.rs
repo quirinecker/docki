@@ -17,12 +17,14 @@ pub enum ShellArg {
 pub enum CommandArg {
     /// Builds the documentation into a dist folder
     Build {
+		/// When set to true, docki will download revealjs before building the documentation.
+		/// Otherwise it will use the cdn for revealjs
         #[arg(short, long)]
         offline_reveal: bool,
     },
     /// Checks if everything required for docki is installed
     Health,
-    /// Helper command for installing asciidoctor-reveal-js
+    /// Deprecated: Helper command for installing asciidoctor-reveal-js
     InstallReveal,
     /// Starts a Webserver with the live preview of the Documentation
     Serve {
