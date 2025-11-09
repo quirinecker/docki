@@ -1,29 +1,26 @@
 name: Rust
 
 on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'Cargo.toml'
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ["main"]
+        paths:
+            - "Cargo.toml"
 
 env:
-  CARGO_TERM_COLOR: always
+    CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-    - name: Publish to crates.io
-      env:
-        CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
-      run: |
-        cargo publish --verbose
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build
+              run: cargo build --verbose
+            - name: Run tests
+              run: cargo test --verbose
+            - name: Publish to crates.io
+              env:
+                  CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+              run: |
+                  cargo publish --verbose

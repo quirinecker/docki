@@ -5,8 +5,6 @@ on:
         branches: ["main"]
         paths:
             - "Cargo.toml"
-    pull_request:
-        branches: ["main"]
 
 env:
     CARGO_TERM_COLOR: always
