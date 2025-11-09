@@ -1,20 +1,19 @@
-use colored::Colorize;
+use nu_ansi_term::Color::LightGreen;
+use nu_ansi_term::Color::LightRed;
+use nu_ansi_term::Style;
 
 pub fn display_status(context1: &str, context2: &str, in_path: &str, out_path: &str) {
-    let colored_context = color_context(context2);
+    let colored_context = if context2 == "Error" {
+        LightRed.paint(context2)
+    } else {
+        LightGreen.paint(context2)
+    };
+
     println!(
         "({}) [{}] {} -> {}",
-        context1.bold(),
+        Style::new().paint(context1),
         colored_context,
         in_path,
         out_path
     );
-}
-
-fn color_context(context: &str) -> colored::ColoredString {
-    if context == "Error" {
-        return context.bright_red()
-    } else {
-        return context.bright_green()
-    }
 }
