@@ -12,10 +12,12 @@ fn exec_command(command: &mut process::Command) -> Result<(), String> {
         }
     } else {
         println!("{}", result.unwrap_err());
-        let binary_name = command.get_args().next();
+
+        let binary_name = command.get_program().to_str().unwrap_or("Something is");
+
         return Err(format!(
             "{} not installed. For more information run docki health!",
-            binary_name.unwrap_or("Something is")
+            binary_name
         ));
     }
 }
