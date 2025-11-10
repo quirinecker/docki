@@ -91,7 +91,6 @@ impl BuildExecution {
                 DockiBuildResult::Copy(out_path) => self.display_building_status("Copy", &in_path, &out_path),
                 DockiBuildResult::Slide(out_path) => self.display_building_status("Slide", &in_path, &out_path),
                 DockiBuildResult::Doc(out_path) => self.display_building_status("Doc", &in_path, &out_path),
-				DockiBuildResult::Silent => ()
             }
         }
 

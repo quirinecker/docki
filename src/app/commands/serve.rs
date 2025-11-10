@@ -78,7 +78,6 @@ fn build_file(paths: Vec<std::path::PathBuf>) {
             display_rebuilding_status("Error", &in_path, "");
             println!("{}", err);
         },
-		DockiBuildResult::Silent => ()
     }
 }
 
