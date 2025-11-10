@@ -1,28 +1,28 @@
 use std::{
-    io::Cursor,
-    path::PathBuf
+    fmt::format, io::Cursor, path::PathBuf
 };
 
 use crate::app::{
-    build::{docki_build, DockiBuildResult},
-    fs_util::{self, create_dir_recursive}, log::display_status,
+    build::{DockiBuildResult, docki_build}, config::config::Config, fs_util::{self, create_dir_recursive}, log::display_status
 };
 
 pub struct BuildExecution {
     progress: usize,
     goal: usize,
+	docs_dir: String
 }
 
 impl BuildExecution {
-    pub fn new() -> Self {
+    pub fn new(docs_dir: &str) -> Self {
         return BuildExecution {
             progress: 0,
             goal: 0,
+			docs_dir: docs_dir.to_string()
         };
     }
 
-    pub async fn execute(&mut self, offline_reveal: bool) -> Result<(), String> {
-        let path = "./docs/".to_string();
+    pub async fn execute(&mut self, config: &Config) -> Result<(), String> {
+        let path = self.docs_dir.to_string();
 
         if !fs_util::directory_exists(&path) {
             return Err(
@@ -30,15 +30,15 @@ impl BuildExecution {
             );
         }
 
-        if let Err(error) = Self::prepare(offline_reveal).await {
+        if let Err(error) = self.prepare(config.offline_reveal).await {
             return Err(error);
         }
 
-        return self.build_dir(&path, offline_reveal);
+        return self.build_dir(&path, config.offline_reveal);
     }
 
 
-    async fn prepare(offline_reveal: bool) -> Result<(), String> {
+    async fn prepare(&self, offline_reveal: bool) -> Result<(), String> {
 		if !offline_reveal {
 			return Ok(())
 		}
@@ -46,7 +46,7 @@ impl BuildExecution {
         let reveal_version = "5.2.1";
         let target = format!("https://github.com/hakimel/reveal.js/archive/{reveal_version}.zip");
 
-        create_dir_recursive("./docs/slides");
+        create_dir_recursive(format!("{}/slides", self.docs_dir).as_str());
 
 		reqwest::get(target.clone()).await.unwrap();
         let Ok(response) = reqwest::get(target).await else {
@@ -57,7 +57,7 @@ impl BuildExecution {
             return Err("could not extract bytes".to_string())
         };
 
-        let out = PathBuf::from("./docs/slides/revealjs");
+        let out = PathBuf::from(format!("{}/slides/revealjs", self.docs_dir));
 
         if zip_extract::extract(Cursor::new(bytes), &out, true).is_err() {
             return Err("could not write extracted archive to disk".to_string());

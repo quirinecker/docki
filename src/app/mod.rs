@@ -26,10 +26,10 @@ impl App {
         Self::setup_environment_variables();
 
         match args.command {
-            CommandArg::Build { .. } => build(config.offline_reveal).await,
+            CommandArg::Build { .. } => build(&config).await,
             CommandArg::Health => health(),
             CommandArg::InstallReveal => install_reveal().await,
-            CommandArg::Serve { .. } => serve(config.port).await,
+            CommandArg::Serve { .. } => serve(&config).await,
             CommandArg::Completions { shell } => completions(shell)
         };
     }

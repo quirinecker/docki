@@ -7,16 +7,16 @@ use notify::{
 };
 use std::{env, path::Path};
 
-use crate::app::{ watcher::watcher, build::{docki_build, DockiBuildResult}, commands::build::build, log::display_status};
+use crate::app::{ build::{DockiBuildResult, docki_build}, commands::build::build, config::config::Config, log::display_status, watcher::watcher};
 
 
-pub async fn serve(port: u16) {
-    build(false).await;
-    tokio::join!(watch_and_build(), start_server(port));
+pub async fn serve(config: &Config) {
+    build(config).await;
+    tokio::join!(watch_and_build(&config.docs_dir), start_server(config.port));
 }
 
-async fn watch_and_build() {
-    watch(Path::new("./docs"))
+async fn watch_and_build(docs_dir: &str) {
+    watch(Path::new(docs_dir))
         .await
         .expect("something went wrong")
 }
