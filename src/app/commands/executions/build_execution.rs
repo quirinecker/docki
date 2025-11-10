@@ -73,20 +73,24 @@ impl BuildExecution {
             return Err(result.unwrap_err())
         };
 
+		let paths = paths.into_iter()
+			.filter(|path| offline_reveal || !path.starts_with("./docs/slides/revealjs"))
+			.collect::<Vec<String>>();
+
+		self.goal = paths.len();
+
         for (index, in_path) in paths.iter().enumerate() {
             self.progress = index + 1;
-            self.goal = paths.len();
             let result = docki_build(&in_path, offline_reveal);
 
             match result {
                 DockiBuildResult::Err(err) => {
-                    self.display_building_status("Error", in_path, "");
+                    self.display_building_status("Error", &in_path, "");
                     println!("{}", err)
                 },
                 DockiBuildResult::Copy(out_path) => self.display_building_status("Copy", &in_path, &out_path),
                 DockiBuildResult::Slide(out_path) => self.display_building_status("Slide", &in_path, &out_path),
                 DockiBuildResult::Doc(out_path) => self.display_building_status("Doc", &in_path, &out_path),
-				DockiBuildResult::Silent => ()
             }
         }
 

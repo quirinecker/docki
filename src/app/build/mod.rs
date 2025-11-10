@@ -23,10 +23,6 @@ pub fn docki_build(in_path: &str, offline_reveal: bool) -> DockiBuildResult {
 
         DockiBuildResult::Doc(convert_out_path)
     } else {
-		if in_path.starts_with("./docs/slides/revealjs") && !offline_reveal {
-			return DockiBuildResult::Silent;
-		}
-
         if let Err(err) = copy(&in_path, &out_path) {
             return DockiBuildResult::Err(err);
         }
@@ -50,5 +46,4 @@ pub enum DockiBuildResult {
     Doc(String),
     Copy(String),
     Err(String),
-	Silent,
 }
