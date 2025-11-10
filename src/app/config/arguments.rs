@@ -1,9 +1,13 @@
+use super::config::Config;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
 pub struct Args {
     #[command(subcommand)]
     pub command: CommandArg,
+
+    #[arg(short, long)]
+    pub docs_dir: Option<String>,
 }
 
 #[derive(Subcommand)]
@@ -17,8 +21,8 @@ pub enum ShellArg {
 pub enum CommandArg {
     /// Builds the documentation into a dist folder
     Build {
-		/// When set to true, docki will download revealjs before building the documentation.
-		/// Otherwise it will use the cdn for revealjs
+        /// When set to true, docki will download revealjs before building the documentation.
+        /// Otherwise it will use the cdn for revealjs
         #[arg(short, long)]
         offline_reveal: bool,
     },
@@ -38,3 +42,5 @@ pub enum CommandArg {
         shell: ShellArg,
     },
 }
+
+impl Args {}

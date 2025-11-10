@@ -3,7 +3,7 @@ use std::io;
 use clap::CommandFactory;
 use clap_complete::{generate, shells::{Bash, Fish, Zsh}};
 
-use crate::app::args::structure::{Args, ShellArg};
+use crate::app::config::arguments::{Args, ShellArg};
 
 pub fn completions(shell: ShellArg) {
     let mut command = Args::command();

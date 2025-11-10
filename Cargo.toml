@@ -23,3 +23,5 @@ tokio = { version = "1.26.0", features = ["full"] }
 zip-extract = "0.1.1"
 clap_complete = "4.1.4"
 nu-ansi-term = "0.50.3"
+config = { version = "0.15.18", features = ["toml"] }
+serde = "1.0.228"

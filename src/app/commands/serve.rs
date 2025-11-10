@@ -10,7 +10,7 @@ use std::{env, path::Path};
 use crate::app::{ watcher::watcher, build::{docki_build, DockiBuildResult}, commands::build::build, log::display_status};
 
 
-pub async fn serve(port: Option<u16>) {
+pub async fn serve(port: u16) {
     build(false).await;
     tokio::join!(watch_and_build(), start_server(port));
 }
@@ -22,8 +22,7 @@ async fn watch_and_build() {
 }
 
 
-async fn start_server(port: Option<u16>) {
-    let port = port.unwrap_or(8080);
+async fn start_server(port: u16) {
 	let link = &format!("http://localhost:{}", port);
 	let hyperlink = Green.paint(link).hyperlink(link);
 
