@@ -1,13 +1,27 @@
-use super::config::Config;
 use clap::{Parser, Subcommand};
+use nu_ansi_term::{AnsiGenericString, Style};
+
+fn github_hyperlink() -> AnsiGenericString<'static, str> {
+	return Style::new()
+		.bold()
+		.underline()
+		.paint("https://github.com/quirinecker/docki")
+		.hyperlink("https://github.com/quirinecker/docki")
+}
 
 #[derive(Parser)]
+#[command(after_help = format!("More information like defaults can be found at {}", github_hyperlink()))]
 pub struct Args {
     #[command(subcommand)]
     pub command: CommandArg,
 
+	/// The directory where the documentation is located
     #[arg(short, long)]
-    pub docs_dir: Option<String>,
+    pub input_dir: Option<String>,
+
+	/// The directory where the documentation will be built
+    #[arg(short, long)]
+    pub output_dir: Option<String>,
 }
 
 #[derive(Subcommand)]

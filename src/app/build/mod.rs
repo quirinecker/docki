@@ -6,11 +6,11 @@ use super::fs_util;
 
 pub mod asciidoctor;
 
-pub fn docki_build(in_path: &str, offline_reveal: bool) -> DockiBuildResult {
-    let out_path = in_path.replace("/docs/", "/dist/");
+pub fn docki_build(in_path: &str, offline_reveal: bool, docs_dir: &str) -> DockiBuildResult {
+    let out_path = in_path.replace(docs_dir, "./dist");
     let convert_out_path = out_path.replace(".adoc", ".html");
 
-    if in_path.starts_with("./docs/slides/") && in_path.ends_with(".adoc") {
+    if in_path.starts_with(format!("{}/slides/", docs_dir).as_str()) && in_path.ends_with(".adoc") {
         if let Err(err) = build_slide(&in_path, &convert_out_path, offline_reveal) {
             return DockiBuildResult::Err(err);
         }

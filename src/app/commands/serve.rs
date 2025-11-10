@@ -12,11 +12,11 @@ use crate::app::{ build::{DockiBuildResult, docki_build}, commands::build::build
 
 pub async fn serve(config: &Config) {
     build(config).await;
-    tokio::join!(watch_and_build(&config.docs_dir), start_server(config.port));
+    tokio::join!(watch_and_build(&config.input_dir), start_server(config.port));
 }
 
 async fn watch_and_build(docs_dir: &str) {
-    watch(Path::new(docs_dir))
+    watch(Path::new(docs_dir), docs_dir)
         .await
         .expect("something went wrong")
 }
@@ -36,27 +36,27 @@ async fn start_server(port: u16) {
     };
 }
 
-async fn watch(path: &Path) -> notify::Result<()> {
+async fn watch(path: &Path, docs_dir: &str) -> notify::Result<()> {
     let (mut watcher, mut rx) = watcher()?;
 
     watcher.watch(path.as_ref(), RecursiveMode::Recursive)?;
 
     while let Some(res) = rx.next().await {
         let event = res.expect("watching failed");
-        file_change(event)
+        file_change(event, docs_dir)
     }
 
     Ok(())
 }
 
-fn file_change(event: Event) {
+fn file_change(event: Event, docs_dir: &str) {
     match event.kind {
-        EventKind::Modify(ModifyKind::Data(_)) => build_file(event.paths),
+        EventKind::Modify(ModifyKind::Data(_)) => build_file(event.paths, docs_dir),
         _ => (),
     }
 }
 
-fn build_file(paths: Vec<std::path::PathBuf>) {
+fn build_file(paths: Vec<std::path::PathBuf>, docs_dir: &str) {
     let invalid_path_message = "changed path is invalid";
     let in_path = paths
         .first()
@@ -67,7 +67,7 @@ fn build_file(paths: Vec<std::path::PathBuf>) {
         .expect(invalid_path_message);
 
 	let in_path = format!("./{}", in_path);
-    let result = docki_build(&in_path, false);
+    let result = docki_build(&in_path, false, docs_dir);
 
     match result {
         DockiBuildResult::Slide(out_path) => display_rebuilding_status("Slide", &in_path, &out_path),

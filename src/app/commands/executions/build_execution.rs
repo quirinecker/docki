@@ -1,5 +1,5 @@
 use std::{
-    fmt::format, io::Cursor, path::PathBuf
+    io::Cursor, path::PathBuf
 };
 
 use crate::app::{
@@ -73,15 +73,16 @@ impl BuildExecution {
             return Err(result.unwrap_err())
         };
 
+		let reveal_dir = format!("{}/slides/revealjs", path);
 		let paths = paths.into_iter()
-			.filter(|path| offline_reveal || !path.starts_with("./docs/slides/revealjs"))
+			.filter(|path| offline_reveal || !path.starts_with(reveal_dir.as_str()))
 			.collect::<Vec<String>>();
 
 		self.goal = paths.len();
 
         for (index, in_path) in paths.iter().enumerate() {
             self.progress = index + 1;
-            let result = docki_build(&in_path, offline_reveal);
+            let result = docki_build(&in_path, offline_reveal, &self.docs_dir);
 
             match result {
                 DockiBuildResult::Err(err) => {

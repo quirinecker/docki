@@ -1,2 +1,3 @@
-docs_dir = "./asciidocs"
+docs_dir = "./docs"
 port = 6969
+offline_reveal = false
