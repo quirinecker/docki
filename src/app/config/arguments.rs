@@ -2,11 +2,11 @@ use clap::{Parser, Subcommand};
 use nu_ansi_term::{AnsiGenericString, Style};
 
 fn github_hyperlink() -> AnsiGenericString<'static, str> {
-	return Style::new()
-		.bold()
-		.underline()
-		.paint("https://github.com/quirinecker/docki")
-		.hyperlink("https://github.com/quirinecker/docki")
+    return Style::new()
+        .bold()
+        .underline()
+        .paint("https://github.com/quirinecker/docki")
+        .hyperlink("https://github.com/quirinecker/docki");
 }
 
 #[derive(Parser)]
@@ -15,12 +15,12 @@ pub struct Args {
     #[command(subcommand)]
     pub command: CommandArg,
 
-	/// The directory where the documentation is located
-    #[arg(short, long)]
+    /// The directory where the documentation is located
+    #[arg(short, long, global = true)]
     pub input_dir: Option<String>,
 
-	/// The directory where the documentation will be built
-    #[arg(short, long)]
+    /// The directory where the documentation will be built
+    #[arg(short, long, global = true)]
     pub output_dir: Option<String>,
 }
 
