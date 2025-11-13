@@ -37,7 +37,7 @@ pub enum CommandArg {
     Build {
         /// When set to true, docki will download revealjs before building the documentation.
         /// Otherwise it will use the cdn for revealjs
-        #[arg(short, long)]
+        #[arg(long)]
         offline_reveal: bool,
     },
     /// Checks if everything required for docki is installed
