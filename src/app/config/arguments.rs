@@ -22,6 +22,11 @@ pub struct Args {
     /// The directory where the documentation will be built
     #[arg(short, long, global = true)]
     pub output_dir: Option<String>,
+
+	/// When set to true, docki will download revealjs before building the documentation.
+	/// Otherwise it will use the cdn for revealjs
+	#[arg(long, global = true)]
+	pub offline_reveal: bool,
 }
 
 #[derive(Subcommand)]
@@ -34,12 +39,7 @@ pub enum ShellArg {
 #[derive(Subcommand)]
 pub enum CommandArg {
     /// Builds the documentation into the specified output_dir
-    Build {
-        /// When set to true, docki will download revealjs before building the documentation.
-        /// Otherwise it will use the cdn for revealjs
-        #[arg(long)]
-        offline_reveal: bool,
-    },
+    Build,
     /// Checks if everything required for docki is installed
     Health,
     /// Deprecated: Helper command for installing asciidoctor-reveal-js

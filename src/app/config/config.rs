@@ -8,7 +8,7 @@ pub struct Config {
     pub port: u16,
     pub input_dir: String,
     pub offline_reveal: bool,
-	pub output_dir: String
+    pub output_dir: String,
 }
 
 impl Config {
@@ -26,14 +26,8 @@ impl Config {
                 _ => self.port,
             },
             input_dir: args.input_dir.clone().unwrap_or(self.input_dir),
-			output_dir: args.output_dir.clone().unwrap_or(self.output_dir),
-            offline_reveal: {
-                if let CommandArg::Build { offline_reveal } = args.command {
-                    offline_reveal
-                } else {
-                    self.offline_reveal
-                }
-            },
+            output_dir: args.output_dir.clone().unwrap_or(self.output_dir),
+            offline_reveal: args.offline_reveal || self.offline_reveal,
         }
     }
 }
@@ -43,7 +37,7 @@ impl Default for Config {
         Self {
             port: 8080,
             input_dir: "./docs".to_string(),
-			output_dir: "./dist".to_string(),
+            output_dir: "./dist".to_string(),
             offline_reveal: false,
         }
     }
