@@ -1,6 +1,6 @@
 /target
 dist
-/docs
 res/test/docs/slides/revealjs
+res/test/asciidocs/slides/revealjs
 res/test/result
 result

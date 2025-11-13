@@ -3,11 +3,13 @@ pub mod build;
 pub mod fs_util;
 pub mod watcher;
 pub mod log;
-mod args;
+pub mod config;
 
 use std::env;
 
-use self::args::{args, structure::CommandArg};
+use crate::app::config::config::Config;
+
+use self::config::{args, arguments::CommandArg};
 use self::commands::build::build;
 use self::commands::completions::completions;
 use self::commands::health::health;
@@ -20,13 +22,14 @@ impl App {
 
     pub async fn start(&self) {
         let args = args();
+		let config = Config::load().unwrap_or(Config::default()).merge_with_args(&args);
         Self::setup_environment_variables();
 
         match args.command {
-            CommandArg::Build { offline_reveal } => build(offline_reveal).await,
+            CommandArg::Build { .. } => build(&config).await,
             CommandArg::Health => health(),
             CommandArg::InstallReveal => install_reveal().await,
-            CommandArg::Serve { port } => serve(port).await,
+            CommandArg::Serve { .. } => serve(&config).await,
             CommandArg::Completions { shell } => completions(shell)
         };
     }

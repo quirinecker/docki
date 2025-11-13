@@ -1,10 +1,10 @@
 use clap::Parser;
 
-use self::structure::Args;
+use self::arguments::Args;
 
-pub mod structure;
+pub mod arguments;
+pub mod config;
 
 pub fn args() -> Args {
     return Args::parse();
-
 }
