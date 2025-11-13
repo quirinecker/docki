@@ -3,7 +3,7 @@ pub mod build;
 pub mod fs_util;
 pub mod watcher;
 pub mod log;
-mod config;
+pub mod config;
 
 use std::env;
 
