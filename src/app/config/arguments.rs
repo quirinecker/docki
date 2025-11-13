@@ -33,7 +33,7 @@ pub enum ShellArg {
 
 #[derive(Subcommand)]
 pub enum CommandArg {
-    /// Builds the documentation into a dist folder
+    /// Builds the documentation into the specified output_dir
     Build {
         /// When set to true, docki will download revealjs before building the documentation.
         /// Otherwise it will use the cdn for revealjs

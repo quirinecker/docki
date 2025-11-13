@@ -99,17 +99,17 @@ impl <'a> DockiBuilder <'a> {
 
 	/// Builds a single file without a pretty output
 	pub fn build_file(&self, path: &str) -> DockiBuildResult {
-		let out_path = path.replace(&self.config.input_dir, "./dist");
+		let out_path = path.replace(&self.config.input_dir, &self.config.output_dir);
 		let convert_out_path = out_path.replace(".adoc", ".html");
 
 		if path.starts_with(format!("{}/slides/", &self.config.input_dir).as_str()) && path.ends_with(".adoc") {
-			if let Err(err) = build_slide(&path, &convert_out_path, self.config.offline_reveal) {
+			if let Err(err) = build_slide(&path, &convert_out_path, self.config) {
 				return DockiBuildResult::Err(err);
 			}
 
 			DockiBuildResult::Slide(convert_out_path)
 		} else if path.ends_with(".adoc") {
-			if let Err(err) = build_doc(&path, &convert_out_path) {
+			if let Err(err) = build_doc(&path, &convert_out_path, self.config) {
 				return DockiBuildResult::Err(err);
 			}
 

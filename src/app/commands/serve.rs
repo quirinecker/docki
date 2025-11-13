@@ -46,7 +46,7 @@ impl <'a> Server <'a> {
 			hyperlink
 		);
 
-		let Ok(()) = listen("localhost", self.config.port, "./dist").await else {
+		let Ok(()) = listen("localhost", self.config.port, self.config.output_dir.clone()).await else {
 			panic!("could not start server")
 		};
 	}
