@@ -64,6 +64,11 @@
             libiconv
             makeWrapper
           ];
+          binaries = [ "docki" ];
+          # only including the main binary in build
+          # There is no better option at the time of writing this
+          # https://github.com/nix-community/naersk/issues/127
+          copyBinsFilter = ''select(.reason == "compiler-artifact" and .executable != null and .profile.test == false and .target.name == "docki")'';
           postInstall = ''
             mkdir -p $out/share/bash-completion/completions
             mkdir -p $out/share/zsh/site-functions
