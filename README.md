@@ -112,6 +112,10 @@ home.packages = with pkgs; [
 ]
 ```
 
+## Configuration
+
+You can configure some of the cli arguments with a config file. It is always located relatively to the current directory under `./docki.config.toml`. Available options and their defaults can be found in the [docki.config.toml](config/docki.config.toml) file. CLI arguments with the same names as in the config usually have also the same default values. As a fallback you can also use the [config.rs](src/app/config/config.rs) file for reference.
+
 ## Development
 
 ### Running it

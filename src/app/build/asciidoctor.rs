@@ -1,6 +1,8 @@
 use regex::Regex;
 use std::process;
 
+use crate::app::config::config::Config;
+
 fn exec_command(command: &mut process::Command) -> Result<(), String> {
     let result = command.output();
 
@@ -12,9 +14,13 @@ fn exec_command(command: &mut process::Command) -> Result<(), String> {
         }
     } else {
         println!("{}", result.unwrap_err());
-        return Err(
-            "asciidoctor not installed. For more information run docki health!".to_string(),
-        );
+
+        let binary_name = command.get_program().to_str().unwrap_or("Something is");
+
+        return Err(format!(
+            "{} not installed. For more information run docki health!",
+            binary_name
+        ));
     }
 }
 
@@ -28,14 +34,17 @@ fn asciidoctor_docs(in_path: &str, out_path: &str) -> process::Command {
     return command;
 }
 
-fn asciidoctor_slides(in_path: &str, out_path: &str, offline_reveal: bool) -> process::Command {
+fn asciidoctor_slides(in_path: &str, out_path: &str, config: &Config) -> process::Command {
     let mut command = process::Command::new(format!("asciidoctor-revealjs"));
     let out_dir = parent_path(out_path);
-	let revealjs_path = if offline_reveal {
-		path_between(out_dir.to_string(), "./dist/slides/revealjs".to_string())
-	} else {
-		"https://cdn.jsdelivr.net/npm/reveal.js@5.2.1".to_string()
-	};
+    let revealjs_path = if config.offline_reveal {
+        path_between(
+            out_dir.to_string(),
+            format!("{}/slides/revealjs", config.output_dir),
+        )
+    } else {
+        "https://cdn.jsdelivr.net/npm/reveal.js@5.2.1".to_string()
+    };
 
     command
         .arg(format!("{in_path}"))
@@ -100,13 +109,13 @@ pub fn matching_from_start(from_segments: &Vec<String>, to_segments: &Vec<String
     return from_segments.len();
 }
 
-pub fn build_doc(in_path: &str, out_path: &str) -> Result<(), String> {
+pub fn build_doc(in_path: &str, out_path: &str, _: &Config) -> Result<(), String> {
     let mut command = asciidoctor_docs(in_path, out_path);
     return exec_command(&mut command);
 }
 
-pub fn build_slide(in_path: &str, out_path: &str, offline_reveal: bool) -> Result<(), String> {
-    let mut command = asciidoctor_slides(in_path, out_path, offline_reveal);
+pub fn build_slide(in_path: &str, out_path: &str, config: &Config) -> Result<(), String> {
+    let mut command = asciidoctor_slides(in_path, out_path, config);
     return exec_command(&mut command);
 }
 

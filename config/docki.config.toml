@@ -1,0 +1,4 @@
+port = 8080
+input_dir = "./docs"
+offline_reveal = false
+output_dir = "./dist"

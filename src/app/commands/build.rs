@@ -1,6 +1,10 @@
-use super::executions::build_execution::BuildExecution;
+use crate::app::config::config::Config;
 
-pub async fn build(offline_reveal: bool) -> () {
-    let mut build_execution = BuildExecution::new();
-    build_execution.execute(offline_reveal).await.expect("build failed")
+use crate::app::build::DockiBuilder;
+
+pub async fn build(config: &Config) -> () {
+    let mut builder = DockiBuilder::new(config);
+
+	builder.prepare().await.expect("could not prepare for build");
+    builder.build_docs().expect("build failed")
 }
