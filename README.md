@@ -1,9 +1,5 @@
 # Docki
 
-> [!NOTE]
-> This project is under renovations. It can be used, but it might not be completely stable yet.
-
-
 ## Preview
 
 ![screencast](.github/assets/screencast.gif)
